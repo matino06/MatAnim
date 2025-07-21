@@ -2,7 +2,7 @@ export class Scene {
     constructor(canvas, { autoResize = true } = {}) {
         this.canvas = canvas
         this.ctx = canvas.getContext('2d');
-        this.objects = [];
+        this.graphicalObjects = [];
         this.width = window.innerWidth;
         this.height = window.innerHeight;
         this.resize();
@@ -23,11 +23,11 @@ export class Scene {
     }
 
     add(object) {
-        this.objects.push(object)
+        this.graphicalObjects.push(object)
     }
 
     draw() {
-        for (const object of this.objects) {
+        for (const object of this.graphicalObjects) {
             object.render(this.ctx);
         }
     }

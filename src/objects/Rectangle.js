@@ -1,6 +1,6 @@
-import { Object } from "../core/Object.js"
+import { GraphicalObject } from "../core/GraphicalObject.js"
 
-export class Rectangle extends Object {
+export class Rectangle extends GraphicalObject {
     constructor(x, y, width, height, color = "rgb(255, 32, 88)") {
         super();
         this.x = x;

@@ -1,7 +1,7 @@
-export class Object {
+export class GraphicalObject {
     constructor() {
-        if (new.target === Object) {
-            throw new Error("Object is abstract and cannot be instantiated directly.");
+        if (new.target === GraphicalObject) {
+            throw new Error("GraphicalObject is abstract and cannot be instantiated directly.");
         }
     }
 
