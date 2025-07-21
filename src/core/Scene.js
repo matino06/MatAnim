@@ -3,8 +3,6 @@ export class Scene {
         this.canvas = canvas
         this.ctx = canvas.getContext('2d');
         this.graphicalObjects = [];
-        this.width = window.innerWidth;
-        this.height = window.innerHeight;
         this.resize();
 
         if (autoResize) {
@@ -15,11 +13,12 @@ export class Scene {
     }
 
     resize(width = window.innerWidth, height = window.innerHeight) {
-        this.canvas.width = width;
-        this.canvas.height = height;
-        this.width = width;
-        this.height = height;
-        this.draw()
+        const rect = this.canvas.getBoundingClientRect();
+        this.canvas.width = rect.width;
+        this.canvas.height = rect.height;
+        this.width = rect.width;
+        this.height = rect.height;
+        this.draw();
     }
 
     add(object) {

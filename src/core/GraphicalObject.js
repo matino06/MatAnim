@@ -20,7 +20,7 @@ export class GraphicalObject {
 
         ctx.strokeStyle = this.color;
         ctx.fillStyle = this.color;
-        ctx.lineWidth = 2;
+        ctx.lineWidth = this.lineWidth;
         ctx.stroke();
         ctx.fill();
     }

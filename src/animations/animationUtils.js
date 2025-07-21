@@ -1,6 +1,6 @@
 import { rgbToRgba } from "../core/utils.js";
 
-export function drawOutline(ctx, points, segmentLengths, totalLength, outlineProgress, color, lineWidth = 2) {
+export function drawOutline(ctx, points, segmentLengths, totalLength, outlineProgress, { color, lineWidth }) {
     ctx.beginPath();
     ctx.moveTo(points[0].x, points[0].y);
 
@@ -23,7 +23,7 @@ export function drawOutline(ctx, points, segmentLengths, totalLength, outlinePro
     ctx.stroke();
 }
 
-export function fadeInFill(ctx, points, fillProgress, color) {
+export function fadeInFill(ctx, points, fillProgress, { color }) {
     ctx.beginPath();
     ctx.moveTo(points[0].x, points[0].y);
 

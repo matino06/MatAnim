@@ -1,11 +1,12 @@
 import { GraphicalObject } from "../core/GraphicalObject.js"
 
 export class Circle extends GraphicalObject {
-    constructor(cx, cy, r, color = "rgb(255, 32, 88)") {
+    constructor(cx, cy, r, { lineWidth = 2, color = "rgb(255, 32, 88)" } = {}) {
         super();
         this.cx = cx;
         this.cy = cy;
         this.r = r;
+        this.lineWidth = lineWidth;
         this.color = color;
     }
 

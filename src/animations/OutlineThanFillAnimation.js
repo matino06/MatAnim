@@ -32,16 +32,16 @@ export class OutlineThanFillAnimation extends Animation {
                 this.startTime = timestamp;
             }
 
-            drawOutline(this.ctx, this.points, this.segmentLengths, this.totalLength, outlineProgress, this.graphicalObject.color);
+            drawOutline(this.ctx, this.points, this.segmentLengths, this.totalLength, outlineProgress, { color: this.graphicalObject.color, lineWidth: this.graphicalObject.lineWidth });
             return true;
         } else if (this.phase === "fill") {
             let fillProgress = (elapsed) / this.fillFadeDuration;
             if (fillProgress > 1) {
-                this.scene.add(this.object);
+                this.scene.add(this.graphicalObject);
                 return false;
             }
 
-            fadeInFill(this.ctx, this.points, fillProgress, this.graphicalObject.color);
+            fadeInFill(this.ctx, this.points, fillProgress, { color: this.graphicalObject.color });
             return true;
         }
     }
