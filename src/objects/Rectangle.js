@@ -1,10 +1,9 @@
 import { GraphicalObject } from "../core/GraphicalObject.js"
 
 export class Rectangle extends GraphicalObject {
-    constructor(x, y, width, height, lineWidth = 2, color = "rgb(255, 32, 88)") {
+    constructor(points, width, height, lineWidth = 2, color = "rgb(255, 32, 88)") {
         super();
-        this.x = x;
-        this.y = y;
+        this.points = points;
         this.width = width;
         this.height = height;
         this.lineWidth = lineWidth;
@@ -12,13 +11,18 @@ export class Rectangle extends GraphicalObject {
     }
 
     getPathSegments() {
+        const point = this.points[0];
         return [
-            { x: this.x, y: this.y },
-            { x: this.x + this.width, y: this.y },
-            { x: this.x + this.width, y: this.y + this.height },
-            { x: this.x, y: this.y + this.height },
-            { x: this.x, y: this.y }
+            { x: point.x, y: point.y },
+            { x: point.x + this.width, y: point.y },
+            { x: point.x + this.width, y: point.y + this.height },
+            { x: point.x, y: point.y + this.height },
+            { x: point.x, y: point.y }
         ];
+    }
+
+    translate(delta) {
+        super.translate(delta);
     }
 
     render(ctx) {

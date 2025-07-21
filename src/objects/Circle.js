@@ -1,10 +1,9 @@
 import { GraphicalObject } from "../core/GraphicalObject.js"
 
 export class Circle extends GraphicalObject {
-    constructor(cx, cy, r, { lineWidth = 2, color = "rgb(255, 32, 88)" } = {}) {
+    constructor(points, r, { lineWidth = 2, color = "rgb(255, 32, 88)" } = {}) {
         super();
-        this.cx = cx;
-        this.cy = cy;
+        this.points = points
         this.r = r;
         this.lineWidth = lineWidth;
         this.color = color;
@@ -12,15 +11,20 @@ export class Circle extends GraphicalObject {
 
     getPathSegments() {
         let steps = 100;
+        const point = this.points[0];
         const points = [];
         for (let i = 0; i <= steps; i++) {
             const angle = (i / steps) * 2 * Math.PI;
             points.push({
-                x: this.cx + this.r * Math.cos(angle),
-                y: this.cy + this.r * Math.sin(angle),
+                x: point.x + this.r * Math.cos(angle),
+                y: point.y + this.r * Math.sin(angle),
             });
         }
         return points;
+    }
+
+    translate(delta) {
+        super.translate(delta);
     }
 
     render(ctx) {

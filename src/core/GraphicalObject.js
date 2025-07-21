@@ -1,12 +1,21 @@
 export class GraphicalObject {
-    constructor() {
+    constructor(points) {
         if (new.target === GraphicalObject) {
             throw new Error("GraphicalObject is abstract and cannot be instantiated directly.");
         }
+
+        this.points = points;
     }
 
     getPathSegments() {
         throw new Error("Method getPathSegments() must be implemented");
+    }
+
+    translate(delta) {
+        for (let i = 0; i < this.points.length; i++) {
+            this.points[i].x += delta.x;
+            this.points[i].y += delta.y;
+        }
     }
 
     render(ctx) {
