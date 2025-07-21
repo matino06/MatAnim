@@ -1,12 +1,9 @@
 import { GraphicalObject } from "../core/GraphicalObject.js"
 
 export class Circle extends GraphicalObject {
-    constructor(points, r, { lineWidth = 2, color = "rgb(255, 32, 88)" } = {}) {
-        super();
-        this.points = points
+    constructor(points, r, options = {}) {
+        super(points, options);
         this.r = r;
-        this.lineWidth = lineWidth;
-        this.color = color;
     }
 
     getPathSegments() {

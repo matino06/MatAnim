@@ -1,10 +1,14 @@
+import { theme } from "../theme/theme.js"
+
 export class GraphicalObject {
-    constructor(points) {
+    constructor(points, { lineWidth = theme.lineWidth, color = theme.colors.primary } = {}) {
         if (new.target === GraphicalObject) {
             throw new Error("GraphicalObject is abstract and cannot be instantiated directly.");
         }
 
         this.points = points;
+        this.lineWidth = lineWidth;
+        this.color = color;
     }
 
     getPathSegments() {

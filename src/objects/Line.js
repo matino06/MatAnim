@@ -1,10 +1,14 @@
 import { GraphicalObject } from "../core/GraphicalObject.js";
+import { theme } from "../theme/theme.js"
 
 export class Line extends GraphicalObject {
-    constructor(points, { lineWidth = 2, color = "rgb(255, 32, 88)" } = {}) {
-        super(points);
-        this.lineWidth = lineWidth;
-        this.color = color;
+    constructor(points, options = {}) {
+        const defaultOptions = {
+            color: theme.colors.foreground,
+            lineWidth: theme.lineWidth
+        }
+
+        super(points, { ...defaultOptions, ...options });
     }
 
     getPathSegments() {

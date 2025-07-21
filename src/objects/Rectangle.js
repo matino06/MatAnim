@@ -1,13 +1,10 @@
 import { GraphicalObject } from "../core/GraphicalObject.js"
 
 export class Rectangle extends GraphicalObject {
-    constructor(points, width, height, lineWidth = 2, color = "rgb(255, 32, 88)") {
-        super();
-        this.points = points;
+    constructor(points, width, height, options = {}) {
+        super(points, options);
         this.width = width;
         this.height = height;
-        this.lineWidth = lineWidth;
-        this.color = color;
     }
 
     getPathSegments() {
