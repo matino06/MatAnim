@@ -10,11 +10,11 @@ export class Rectangle extends GraphicalObject {
     getPathSegments() {
         const point = this.points[0];
         return [
-            { x: point.x, y: point.y },
-            { x: point.x + this.width, y: point.y },
-            { x: point.x + this.width, y: point.y + this.height },
-            { x: point.x, y: point.y + this.height },
-            { x: point.x, y: point.y }
+            { type: 'L', x: point.x, y: point.y },
+            { type: 'L', x: point.x + this.width, y: point.y },
+            { type: 'L', x: point.x + this.width, y: point.y + this.height },
+            { type: 'L', x: point.x, y: point.y + this.height },
+            { type: 'L', x: point.x, y: point.y }
         ];
     }
 

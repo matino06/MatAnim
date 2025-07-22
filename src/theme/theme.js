@@ -8,6 +8,5 @@ export const theme = {
         text: "rgb(250, 250, 250)"
     },
     lineWidth: 2,
-    font: "16px Arial",
 };
 

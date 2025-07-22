@@ -12,5 +12,8 @@
     "javascript"
   ],
   "author": "Matino Milicevic",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "opentype.js": "^1.3.4"
+  }
 }

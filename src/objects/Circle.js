@@ -13,6 +13,7 @@ export class Circle extends GraphicalObject {
         for (let i = 0; i <= steps; i++) {
             const angle = (i / steps) * 2 * Math.PI;
             points.push({
+                type: 'L',
                 x: point.x + this.r * Math.cos(angle),
                 y: point.y + this.r * Math.sin(angle),
             });

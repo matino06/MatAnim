@@ -5,5 +5,7 @@ export { Scene } from './core/Scene.js';
 
 export { Circle } from './objects/Circle.js';
 export { Rectangle } from './objects/Rectangle.js';
+export { Line } from './objects/Line.js'
+export { Text } from './objects/Text.js'
 
 export { OutlineThanFillAnimation } from './animations/OutlineThanFillAnimation.js';
