@@ -25,6 +25,10 @@ export class Text extends GraphicalObject {
         return path.commands;
     }
 
+    translate(delta) {
+        super.translate(delta);
+    }
+
     render(ctx) {
         super.render(ctx);
     }

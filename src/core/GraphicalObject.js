@@ -2,14 +2,19 @@ import { theme } from "../theme/theme.js"
 import { applyPathCommand } from "../utils/graphicalUtils.js";
 
 export class GraphicalObject {
-    constructor(points, { lineWidth = theme.lineWidth, color = theme.colors.primary } = {}) {
+    constructor(points, {
+        lineWidth = theme.lineWidth,
+        borderColor = theme.colors.primary,
+        fillColor = theme.colors.primary
+    } = {}) {
         if (new.target === GraphicalObject) {
             throw new Error("GraphicalObject is abstract and cannot be instantiated directly.");
         }
 
         this.points = points;
         this.lineWidth = lineWidth;
-        this.color = color;
+        this.borderColor = borderColor;
+        this.fillColor = fillColor;
     }
 
     getPathSegments() {
@@ -32,8 +37,8 @@ export class GraphicalObject {
             applyPathCommand(points[i], ctx);
         }
 
-        ctx.strokeStyle = this.color;
-        ctx.fillStyle = this.color;
+        ctx.strokeStyle = this.borderColor;
+        ctx.fillStyle = this.fillColor;
         ctx.lineWidth = this.lineWidth;
         ctx.stroke();
         ctx.fill();

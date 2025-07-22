@@ -4,7 +4,8 @@ import { theme } from "../theme/theme.js"
 export class Line extends GraphicalObject {
     constructor(points, options = {}) {
         const defaultOptions = {
-            color: theme.colors.foreground,
+            borderColor: theme.colors.foreground,
+            fillColor: theme.colors.foreground,
             lineWidth: theme.lineWidth
         }
 
