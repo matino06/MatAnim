@@ -1,5 +1,5 @@
 import { theme } from "../theme/theme.js"
-import opentype from 'opentype.js';
+import { applyPathCommand } from "../utils/graphicalUtils.js";
 
 export class GraphicalObject {
     constructor(points, { lineWidth = theme.lineWidth, color = theme.colors.primary } = {}) {
@@ -23,20 +23,13 @@ export class GraphicalObject {
         }
     }
 
-    async render(ctx) {
-        const points = await this.getPathSegments();
+    render(ctx) {
+        const points = this.getPathSegments();
         ctx.beginPath();
         ctx.moveTo(points[0].x, points[0].y);
 
         for (let i = 1; i < points.length; i++) {
-            if (points[i].type === 'L') {
-                ctx.lineTo(points[i].x, points[i].y);
-            } else if (points[i].type === 'M') {
-                ctx.moveTo(points[i].x, points[i].y);
-            } else if (points[i].type === 'M') {
-                ctx.closePath(points[i].x, points[i].y);
-            }
-
+            applyPathCommand(points[i], ctx);
         }
 
         ctx.strokeStyle = this.color;

@@ -14,6 +14,10 @@ export class AnimationManager {
     }
 
     step(timestamp) {
+        const ctx = this.scene.ctx;
+        ctx.clearRect(0, 0, this.scene.canvas.width, this.scene.canvas.height);
+        this.scene.draw();
+
         this.animations = this.animations.filter(anim => anim.step(timestamp));
 
         if (this.animations.length > 0) {
@@ -21,5 +25,6 @@ export class AnimationManager {
         } else {
             this.running = false;
         }
+
     }
 }

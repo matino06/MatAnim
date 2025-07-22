@@ -12,7 +12,7 @@ export class Scene {
         }
     }
 
-    resize(width = window.innerWidth, height = window.innerHeight) {
+    resize() {
         const rect = this.canvas.getBoundingClientRect();
         this.canvas.width = rect.width;
         this.canvas.height = rect.height;
@@ -22,10 +22,13 @@ export class Scene {
     }
 
     add(object) {
-        this.graphicalObjects.push(object)
+        this.graphicalObjects.push(object);
+        this.draw();
     }
 
     draw() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
         for (const object of this.graphicalObjects) {
             object.render(this.ctx);
         }
