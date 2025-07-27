@@ -1,5 +1,6 @@
 import { theme } from "../theme/theme.js"
 import { applyPathCommand } from "../utils/graphicalUtils.js";
+import { transformCommands } from "../utils/svgUtils.js";
 
 export class GraphicalObject {
     constructor(points, {
@@ -32,7 +33,9 @@ export class GraphicalObject {
     }
 
     scale(a, b) {
-
+        const scaledCommands = transformCommands(this.getCommands(), [{ transformType: 'scale', a, b }]);
+        this.commands = scaledCommands;
+        this.notifyListeners();
     }
 
     addListener(listener) {
@@ -49,7 +52,7 @@ export class GraphicalObject {
         const points = this.getCommands();
         if (points.length === 0) return;
 
-        // Inicijaliziraj stanje
+        // Initialize stanje
         const state = {
             currentX: 0,
             currentY: 0,
