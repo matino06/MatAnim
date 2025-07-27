@@ -62,9 +62,9 @@ export const convertSvgToCommands = (latex, fontSize, position) => {
 
     const transformGroups = (element) => {
         let transformations = [];
-        let current = element.parent;
+        let current = element;
 
-        while (adaptor.kind(current) === 'g') {
+        while (adaptor.kind(current) === 'g' || adaptor.kind(current) === 'use') {
             const transform = adaptor.getAttribute(current, 'transform');
             if (transform) {
                 transform.split(' ').reverse().forEach(t => {
@@ -89,6 +89,12 @@ export const convertSvgToCommands = (latex, fontSize, position) => {
 
     const commands = [];
 
+    adaptor.tags(svgElement, 'use').forEach(useElement => {
+        const pathId = adaptor.getAttribute(useElement, 'xlink:href').slice(1);
+        const transformations = transformGroups(useElement);
+        commands.push(transformCommands(paths[pathId], transformations));
+    });
+
     const rectElements = adaptor.tags(svgElement, 'rect');
     rectElements.forEach(rect => {
         const x = parseFloat(adaptor.getAttribute(rect, 'x') || 0);
@@ -96,7 +102,7 @@ export const convertSvgToCommands = (latex, fontSize, position) => {
         const width = parseFloat(adaptor.getAttribute(rect, 'width'));
         const height = parseFloat(adaptor.getAttribute(rect, 'height'));
 
-        const transformations = transformGroups(rect);
+        const transformations = transformGroups(rect.parent);
 
         const rectCommands = [
             { type: 'M', x: x, y: y },
@@ -108,12 +114,6 @@ export const convertSvgToCommands = (latex, fontSize, position) => {
 
         const transformedRectCommands = transformCommands(rectCommands, transformations);
         commands.push(transformedRectCommands)
-    });
-
-    adaptor.tags(svgElement, 'use').forEach(useElement => {
-        const pathId = adaptor.getAttribute(useElement, 'xlink:href').slice(1);
-        const transformations = transformGroups(useElement);
-        commands.push(transformCommands(paths[pathId], transformations));
     });
 
     return commands.flat();

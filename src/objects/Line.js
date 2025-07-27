@@ -10,13 +10,18 @@ export class Line extends GraphicalObject {
         }
 
         super(points, { ...defaultOptions, ...options });
+        this.commands = this.generateCommands();
     }
 
-    getCommands() {
+    generateCommands() {
         return [
             { type: 'L', x: this.points[0].x, y: this.points[0].y },
             { type: 'L', x: this.points[1].x, y: this.points[1].y }
-        ]
+        ];
+    }
+
+    getCommands() {
+        return this.commands;
     }
 
     translate(delta) {

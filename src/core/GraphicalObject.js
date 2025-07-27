@@ -18,7 +18,7 @@ export class GraphicalObject {
     }
 
     getCommands() {
-        throw new Error("Method getCommands() must be implemented");
+        return this.commands;
     }
 
     translate(delta) {
@@ -26,6 +26,11 @@ export class GraphicalObject {
             this.points[i].x += delta.x;
             this.points[i].y += delta.y;
         }
+        this.commands = this.generateCommands();
+    }
+
+    scale(a, b) {
+
     }
 
     render(ctx) {

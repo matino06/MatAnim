@@ -4,9 +4,10 @@ export class Circle extends GraphicalObject {
     constructor(points, r, options = {}) {
         super(points, options);
         this.r = r;
+        this.commands = this.generateCommands();
     }
 
-    getCommands() {
+    generateCommands() {
         let steps = 100;
         const point = this.points[0];
         const points = [];
@@ -19,6 +20,10 @@ export class Circle extends GraphicalObject {
             });
         }
         return points;
+    }
+
+    getCommands() {
+        return super.getCommands();
     }
 
     translate(delta) {

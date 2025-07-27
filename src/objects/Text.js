@@ -21,15 +21,20 @@ export class Text extends GraphicalObject {
         super(points, finalOptions);
         this.text = text;
         this.fontSize = finalOptions.fontSize;
+        this.commands = this.generateCommands();
     }
 
-    getCommands() {
+    generateCommands() {
         const position = this.points[0];
         const font = opentype.parse(base64ToArrayBuffer(base64RobotoFont));
 
         const path = font.getPath(this.text, position.x, position.y, this.fontSize);
 
         return path.commands;
+    }
+
+    getCommands() {
+        return super.getCommands();
     }
 
     translate(delta) {
