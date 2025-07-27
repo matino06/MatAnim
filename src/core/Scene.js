@@ -1,8 +1,11 @@
+import { GraphicalObjectListener } from "../core/GraphicalObjectListener.js"
+
 export class Scene {
     constructor(canvas, { autoResize = true } = {}) {
         this.canvas = canvas
         this.ctx = canvas.getContext('2d');
         this.graphicalObjects = [];
+        this.graphicalObjectListener = new GraphicalObjectListener(this);
         this.resize();
 
         if (autoResize) {
@@ -23,6 +26,7 @@ export class Scene {
 
     add(object) {
         this.graphicalObjects.push(object);
+        object.addListener(this.graphicalObjectListener);
         this.draw();
     }
 

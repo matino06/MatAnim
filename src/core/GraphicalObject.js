@@ -11,6 +11,7 @@ export class GraphicalObject {
             throw new Error("GraphicalObject is abstract and cannot be instantiated directly.");
         }
 
+        this.listeners = [];
         this.points = points;
         this.lineWidth = lineWidth;
         this.borderColor = borderColor;
@@ -27,10 +28,21 @@ export class GraphicalObject {
             this.points[i].y += delta.y;
         }
         this.commands = this.generateCommands();
+        this.notifyListeners();
     }
 
     scale(a, b) {
 
+    }
+
+    addListener(listener) {
+        this.listeners.push(listener);
+    }
+
+    notifyListeners() {
+        this.listeners.forEach(listener => {
+            listener.graphicalObjestChanged();
+        });
     }
 
     render(ctx) {

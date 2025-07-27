@@ -18,16 +18,4 @@ export class Rectangle extends GraphicalObject {
             { type: 'L', x: point.x, y: point.y }
         ];
     }
-
-    getCommands() {
-        return this.commands;
-    }
-
-    translate(delta) {
-        super.translate(delta);
-    }
-
-    render(ctx) {
-        super.render(ctx);
-    }
 }

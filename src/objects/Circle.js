@@ -21,16 +21,4 @@ export class Circle extends GraphicalObject {
         }
         return points;
     }
-
-    getCommands() {
-        return super.getCommands();
-    }
-
-    translate(delta) {
-        super.translate(delta);
-    }
-
-    render(ctx) {
-        super.render(ctx)
-    }
 }

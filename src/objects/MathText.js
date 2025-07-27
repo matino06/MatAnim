@@ -22,19 +22,7 @@ export class MathText extends GraphicalObject {
         );
     }
 
-    getCommands() {
-        return super.getCommands();
-    }
-
     getPosition() {
         return { x: this.points[0].x, y: this.points[0].y + this.fontSize };
-    }
-
-    translate(delta) {
-        super.translate(delta);
-    }
-
-    render(ctx) {
-        super.render(ctx);
     }
 }

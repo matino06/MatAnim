@@ -19,16 +19,4 @@ export class Line extends GraphicalObject {
             { type: 'L', x: this.points[1].x, y: this.points[1].y }
         ];
     }
-
-    getCommands() {
-        return this.commands;
-    }
-
-    translate(delta) {
-        super.translate(delta);
-    }
-
-    render(ctx) {
-        super.render(ctx);
-    }
 }

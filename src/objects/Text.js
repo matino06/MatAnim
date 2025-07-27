@@ -32,16 +32,4 @@ export class Text extends GraphicalObject {
 
         return path.commands;
     }
-
-    getCommands() {
-        return super.getCommands();
-    }
-
-    translate(delta) {
-        super.translate(delta);
-    }
-
-    render(ctx) {
-        super.render(ctx);
-    }
 }
