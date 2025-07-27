@@ -7,7 +7,7 @@ export class OutlineThanFillAnimation extends Animation {
 
         this.fillFadeDuration = fillFadeDuration;
 
-        this.points = graphicalObject.getPathSegments();
+        this.points = graphicalObject.getCommands();
         this.totalLength = 0;
         this.segmentLengths = [];
         for (let i = 1; i < this.points.length; i++) {

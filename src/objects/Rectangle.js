@@ -5,9 +5,10 @@ export class Rectangle extends GraphicalObject {
         super(points, options);
         this.width = width;
         this.height = height;
+        this.commands = this.generateCommands();
     }
 
-    getPathSegments() {
+    generateCommands() {
         const point = this.points[0];
         return [
             { type: 'L', x: point.x, y: point.y },
@@ -16,6 +17,10 @@ export class Rectangle extends GraphicalObject {
             { type: 'L', x: point.x, y: point.y + this.height },
             { type: 'L', x: point.x, y: point.y }
         ];
+    }
+
+    getCommands() {
+        return this.commands;
     }
 
     translate(delta) {

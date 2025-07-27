@@ -17,8 +17,8 @@ export class GraphicalObject {
         this.fillColor = fillColor;
     }
 
-    getPathSegments() {
-        throw new Error("Method getPathSegments() must be implemented");
+    getCommands() {
+        throw new Error("Method getCommands() must be implemented");
     }
 
     translate(delta) {
@@ -29,12 +29,29 @@ export class GraphicalObject {
     }
 
     render(ctx) {
-        const points = this.getPathSegments();
-        ctx.beginPath();
-        ctx.moveTo(points[0].x, points[0].y);
+        const points = this.getCommands();
+        if (points.length === 0) return;
 
-        for (let i = 1; i < points.length; i++) {
-            applyPathCommand(points[i], ctx);
+        // Inicijaliziraj stanje
+        const state = {
+            currentX: 0,
+            currentY: 0,
+            prevControl: null
+        };
+
+        ctx.beginPath();
+
+        for (let i = 0; i < points.length; i++) {
+            const command = points[i];
+
+            // First command has to be moveTo
+            if (i === 0 && command.type !== 'M') {
+                ctx.moveTo(command.x || 0, command.y || 0);
+                state.currentX = command.x || 0;
+                state.currentY = command.y || 0;
+            } else {
+                applyPathCommand(command, ctx, state);
+            }
         }
 
         ctx.strokeStyle = this.borderColor;

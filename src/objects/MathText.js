@@ -1,0 +1,33 @@
+import { GraphicalObject } from "../core/GraphicalObject";
+import { convertSvgToCommands } from "../utils/svgUtils";
+
+export class MathText extends GraphicalObject {
+    constructor(points, latex, options = {}) {
+        const defaultOptions = {
+            lineWidth: 0.5,
+            fontSize: 16
+        };
+
+        super(points, { ...defaultOptions, ...options });
+        this.points = points;
+        this.latex = latex;
+        this.fontSize = options.fontSize || defaultOptions.fontSize;
+        this.pathSegments = convertSvgToCommands(
+            this.latex,
+            this.fontSize,
+            this.getPosition()
+        );
+    }
+
+    getCommands() {
+        return this.pathSegments;
+    }
+
+    getPosition() {
+        return { x: this.points[0].x, y: this.points[0].y + this.fontSize };
+    }
+
+    render(ctx) {
+        super.render(ctx);
+    }
+}

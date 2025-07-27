@@ -6,7 +6,7 @@ export class Circle extends GraphicalObject {
         this.r = r;
     }
 
-    getPathSegments() {
+    getCommands() {
         let steps = 100;
         const point = this.points[0];
         const points = [];

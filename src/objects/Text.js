@@ -10,17 +10,24 @@ function base64ToArrayBuffer(base64) {
 }
 
 export class Text extends GraphicalObject {
-    constructor(points, text, fontPath, options = {}) {
-        super(points, options);
+    constructor(points, text, options = {}) {
+        const defaultOptions = {
+            lineWidth: 1,
+            fontSize: 16
+        }
+
+        const finalOptions = { ...defaultOptions, ...options }
+
+        super(points, finalOptions);
         this.text = text;
-        this.fontPath = fontPath;
+        this.fontSize = finalOptions.fontSize;
     }
 
-    getPathSegments() {
+    getCommands() {
         const position = this.points[0];
         const font = opentype.parse(base64ToArrayBuffer(base64RobotoFont));
 
-        const path = font.getPath(this.text, position.x, position.y, 72);
+        const path = font.getPath(this.text, position.x, position.y, this.fontSize);
 
         return path.commands;
     }
