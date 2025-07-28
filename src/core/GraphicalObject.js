@@ -17,6 +17,10 @@ export class GraphicalObject {
         this.lineWidth = lineWidth;
         this.borderColor = borderColor;
         this.fillColor = fillColor;
+
+        // Track scalling;
+        this.lastXScale = 1;
+        this.lastYScale = 1;
     }
 
     getCommands() {
@@ -32,10 +36,22 @@ export class GraphicalObject {
         this.notifyListeners();
     }
 
-    scale(a, b) {
-        const scaledCommands = transformCommands(this.getCommands(), [{ transformType: 'scale', a, b }]);
+    scale(xScale = this.lastXScale, yScale = this.lastYScale) {
+        if (xScale === this.lastXScale && yScale === this.lastYScale) {
+            return;
+        }
+
+        const finalXScale = xScale / this.lastXScale;
+        const finalYScale = yScale / this.lastYScale;
+
+        const scaledCommands = transformCommands(
+            this.commands, [{ transformType: 'scale', a: finalXScale, b: finalYScale }]
+        );
         this.commands = scaledCommands;
         this.notifyListeners();
+
+        this.lastXScale = xScale;
+        this.lastYScale = yScale;
     }
 
     addListener(listener) {

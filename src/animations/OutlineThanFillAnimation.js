@@ -34,6 +34,7 @@ export class OutlineThanFillAnimation extends Animation {
             if (outlineProgress > 1) {
                 this.phase = "fill";
                 this.startTime = timestamp;
+                outlineProgress = 1;
             }
 
             drawOutline(ctx, this.points, this.segmentLengths, this.totalLength, outlineProgress, {
@@ -45,7 +46,7 @@ export class OutlineThanFillAnimation extends Animation {
         } else if (this.phase === "fill") {
             let fillProgress = (elapsed) / this.fillFadeDuration;
             if (fillProgress > 1) {
-                this.scene.add(this.graphicalObject);
+                this.scene.add(this.graphicalObject, false);
                 return false;
             }
 
