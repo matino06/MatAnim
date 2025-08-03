@@ -35,7 +35,7 @@ export function drawOutline(ctx, commands, segmentLengths, totalLength, outlineP
     }
 
     ctx.strokeStyle = borderColor;
-    ctx.lineWidth = lineWidth + 0.5;
+    ctx.lineWidth = lineWidth;
     ctx.stroke();
 }
 

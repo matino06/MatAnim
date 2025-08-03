@@ -7,7 +7,18 @@ export class AnimationManager {
     }
 
     add(animation) {
-        this.animations.push(animation);
+        if (animation.graphicalObjectIsComposite()) {
+            const AnimationClass = animation.constructor;
+            const compositeObject = animation.graphicalObject;
+            compositeObject.children.forEach(child => {
+                const childAnimation = new AnimationClass(this.scene, child);
+                this.add(childAnimation);
+            });
+
+            return;
+        } else {
+            this.animations.push(animation);
+        }
         if (!this.running) {
             this.running = true;
             this.lastTimestamp = 0;

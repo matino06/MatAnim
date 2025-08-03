@@ -10,6 +10,10 @@ export class Animation {
         this.startTime = null;
     }
 
+    graphicalObjectIsComposite() {
+        return this.graphicalObject.isComposite;
+    }
+
     step(timestamp) {
         throw new Error("Method step() must be implemented");
     }

@@ -45,7 +45,7 @@ export class Scene {
         object.addListener(this.graphicalObjectListener);
 
         if (reDraw) {
-            this.draws();
+            this.draw();
         }
     }
 

@@ -5,6 +5,10 @@ export class OutlineThanFillAnimation extends Animation {
     constructor(scene, graphicalObject, duration = 500, fillFadeDuration = 500) {
         super(scene, graphicalObject, duration)
 
+        if (!graphicalObject.getCommands()) {
+            return;
+        }
+
         this.fillFadeDuration = fillFadeDuration;
 
         this.points = graphicalObject.getCommands();
