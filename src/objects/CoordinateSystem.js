@@ -1,7 +1,6 @@
 import { GraphicalObjectComposit } from "../core/GraphicalObjectComposit";
 import { theme } from "../theme/theme.js"
 import { NumberLine } from "./NumberLine";
-import { MathText } from "./MathText";
 import { Rectangle } from "./Rectangle.js"
 import { Line } from "./Line"
 import Color from "color";
@@ -93,8 +92,23 @@ export class CoordinateSystem extends GraphicalObjectComposit {
             tickHeight: this.options.tickHeight,
             tickWidth: this.options.tickHeight.tickWidth,
             lineWidth: this.options.tickHeight.lineWidth,
+            constructImmediately: false,
         })
         this.children.push(xAxis)
+
+        const filterFirstAndLastTickLabel = (axis) => {
+            axis.ticks.forEach(tick => {
+                if (tick.value === axis.range[0]) {
+                    axis.options.skipFirstLabel = true;
+                }
+                if (tick.value === axis.range[0]) {
+                    axis.options.skipLastLabel = true;
+                }
+            })
+        }
+
+        filterFirstAndLastTickLabel(xAxis)
+        xAxis.constructTheNumberLine();
 
         const fontSize = xAxis.options.labelFontSize;
 
@@ -130,8 +144,13 @@ export class CoordinateSystem extends GraphicalObjectComposit {
             tickHeight: this.options.tickHeight,
             tickWidth: this.options.tickWidth,
             lineWidth: this.options.lineWidth,
+            constructImmediately: false,
+            label: 'y'
         },);
         this.children.push(yAxis);
+
+        filterFirstAndLastTickLabel(yAxis)
+        yAxis.constructTheNumberLine();
 
         const gridLineColor = Color(theme.colors.foreground);
         if (this.options.hasGrid) {

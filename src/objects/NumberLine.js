@@ -21,14 +21,20 @@ export class NumberLine extends GraphicalObjectComposit {
             skipTicks: [],
             hasLabels: true,
             tickLabels: null,
-            skipFirstLabel: true,
-            skipLastLabel: true,
+            skipFirstLabel: false,
+            skipLastLabel: false,
             tickHeight: 25,
             tickWidth: 2,
             lineWidth: 2,
             labelFontSize: null,
+            label: 'x',
+            hasArrow: true,
+            arrowLength: 25,
+            arrowAngle: 30,
+            arrowLineWidth: 2,
             autoFontScaling: true,
             fontScaleFactor: 0.012,
+            constructImmediately: true,
         };
 
         this.options = { ...defaultOptions, ...options };
@@ -51,7 +57,9 @@ export class NumberLine extends GraphicalObjectComposit {
             this.determineFontSize();
         }
 
-        this.constructTheNumberLine();
+        if (this.options.constructImmediately) {
+            this.constructTheNumberLine();
+        }
         this.isConstructing = false;
     }
 
@@ -233,6 +241,12 @@ export class NumberLine extends GraphicalObjectComposit {
         if (this.options.hasLabels) {
             this.addTickLabelsToChldren();
         }
+        if (this.options.label) {
+            this.addLabelToChildren();
+        }
+        if (this.options.hasArrow) {
+            this.addArrowToChildren();
+        }
     }
 
     addLineToChildren() {
@@ -279,8 +293,6 @@ export class NumberLine extends GraphicalObjectComposit {
                 tick.label.toString(),
                 {
                     fontSize: this.options.labelFontSize,
-                    // borderColor: theme.colors.text,
-                    // fillColor: theme.colors.text,
                 }
             );
 
@@ -293,5 +305,67 @@ export class NumberLine extends GraphicalObjectComposit {
 
             this.children.push(tickLabel);
         })
+    }
+
+    addArrowToChildren() {
+        const { arrowLength, arrowAngle, arrowLineWidth } = this.options;
+        const [p0, p1] = this.points;
+
+        // Izračunaj vektor smjera
+        const dx = p1.x - p0.x;
+        const dy = p1.y - p0.y;
+        const length = Math.sqrt(dx * dx + dy * dy);
+
+        // Preskoči ako linija nema duljinu
+        if (length === 0) return;
+
+        // Glavni kut linije u radijanima
+        const angle = Math.atan2(dy, dx);
+
+        // Izračunaj kutove za strelice
+        const arrowAngleRad = arrowAngle * Math.PI / 180;
+        const angle1 = angle + Math.PI - arrowAngleRad;
+        const angle2 = angle + Math.PI + arrowAngleRad;
+
+        // Izračunaj točke za strelice
+        const arrowPoint1 = {
+            x: p1.x + arrowLength * Math.cos(angle1),
+            y: p1.y + arrowLength * Math.sin(angle1)
+        };
+
+        const arrowPoint2 = {
+            x: p1.x + arrowLength * Math.cos(angle2),
+            y: p1.y + arrowLength * Math.sin(angle2)
+        };
+
+        // Kreiraj linije za strelicu
+        const arrowLine1 = new Line([structuredClone(p1), arrowPoint1], { lineWidth: arrowLineWidth });
+        const arrowLine2 = new Line([structuredClone(p1), arrowPoint2], { lineWidth: arrowLineWidth });
+
+        this.children.push(arrowLine1, arrowLine2);
+    }
+
+    addLabelToChildren() {
+        const axisLabel = new MathText(
+            [{
+                x: this.points[1].x - this.tickLabelXOffset,
+                y: this.points[1].y - this.tickLabelYOffset
+            }],
+            this.options.label.toString(),
+            {
+                fontSize: this.options.labelFontSize * (this.options.label == 'x' ? 0.85 : 1),
+                borderColor: theme.colors.text,
+                fillColor: theme.colors.text,
+            }
+        );
+
+        // Adjust tick label alignment
+        if (this.options.rotation % 180 === 0) { // Horizontal
+            axisLabel.translate({ x: -axisLabel.width * 2.5, y: -axisLabel.height });
+        } else { // Vertical
+            axisLabel.translate({ x: -axisLabel.width / 2, y: axisLabel.height });
+        }
+
+        this.children.push(axisLabel);
     }
 }
