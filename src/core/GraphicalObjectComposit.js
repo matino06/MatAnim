@@ -17,6 +17,7 @@ export class GraphicalObjectComposit extends GraphicalObject {
         this.children.forEach(child => {
             child.translate(delta);
         })
+        this.notifyListeners();
     }
 
     render(ctx) {

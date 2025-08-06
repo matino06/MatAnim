@@ -2,8 +2,8 @@ import { Animation } from "../core/Animation.js"
 import { drawOutline, fadeInFill } from "../utils/animationUtils.js";
 
 export class OutlineThanFillAnimation extends Animation {
-    constructor(scene, graphicalObject, duration = 500, fillFadeDuration = 500) {
-        super(scene, graphicalObject, duration)
+    constructor(graphicalObject, duration = 500, fillFadeDuration = 500) {
+        super(graphicalObject, duration)
 
         if (!graphicalObject.getCommands()) {
             return;
@@ -38,7 +38,7 @@ export class OutlineThanFillAnimation extends Animation {
             let outlineProgress = elapsed / this.duration;
             if (outlineProgress > 1 && !this.fill) {
                 this.scene.add(this.graphicalObject, true);
-                return true;
+                return false;
             }
             if (outlineProgress > 1) {
                 this.phase = "fill";
@@ -59,11 +59,12 @@ export class OutlineThanFillAnimation extends Animation {
                 return false;
             }
 
-            fadeInFill(ctx, this.commands, fillProgress, {
-                borderColor: this.graphicalObject.borderColor,
-                fillColor: this.graphicalObject.fillColor,
-                lineWidth: this.graphicalObject.lineWidth
-            });
+            fadeInFill(ctx, this.commands, fillProgress,
+                {
+                    borderColor: this.graphicalObject.borderColor,
+                    fillColor: this.graphicalObject.fillColor,
+                    lineWidth: this.graphicalObject.lineWidth
+                });
             return true;
         }
     }

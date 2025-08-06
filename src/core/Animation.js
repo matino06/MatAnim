@@ -1,13 +1,15 @@
 export class Animation {
-    constructor(scene, graphicalObject, duration = 500) {
+    constructor(graphicalObject, duration = 500) {
         if (new.target === Animation) {
             throw new Error("Animation is abstract and cannot be instantiated directly.");
         }
-        this.scene = scene;
         this.graphicalObject = graphicalObject;
-        this.ctx = scene.ctx;
         this.duration = duration;
         this.startTime = null;
+    }
+
+    setScene(scene) {
+        this.scene = scene;
     }
 
     graphicalObjectIsComposite() {

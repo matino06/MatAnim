@@ -13,12 +13,13 @@ export class AnimationManager {
             const animationDuration = animation.duration;
             const compositeObject = animation.graphicalObject;
             compositeObject.children.forEach(child => {
-                const childAnimation = new AnimationClass(this.scene, child, animationDuration);
+                const childAnimation = new AnimationClass(child, animationDuration);
                 this.add(childAnimation);
             });
 
             return;
         } else {
+            animation.setScene(this.scene);
             this.animations.push(animation);
         }
         if (!this.running) {
