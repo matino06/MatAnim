@@ -27,11 +27,70 @@ export class GraphicalObject {
         return this.commands;
     }
 
-    translate(delta) {
-        for (let i = 0; i < this.points.length; i++) {
-            this.points[i].x += delta.x;
-            this.points[i].y += delta.y;
+    setWidth() {
+        const commands = this.getCommands();
+        if (!commands || commands.length === 0) {
+            this.width = 0;
+            return;
         }
+
+        let minX = Infinity;
+        let maxX = -Infinity;
+
+        for (const cmd of commands) {
+            if ('x' in cmd) {
+                minX = Math.min(minX, cmd.x);
+                maxX = Math.max(maxX, cmd.x);
+            }
+
+            if (cmd.x1 !== undefined) {
+                minX = Math.min(minX, cmd.x1);
+                maxX = Math.max(maxX, cmd.x1);
+            }
+            if (cmd.x2 !== undefined) {
+                minX = Math.min(minX, cmd.x2);
+                maxX = Math.max(maxX, cmd.x2);
+            }
+        }
+
+        this.width = maxX - minX;
+    }
+
+    setHeight() {
+        const commands = this.getCommands();
+        if (!commands || commands.length === 0) {
+            this.height = 0;
+            return;
+        }
+
+        let minY = Infinity;
+        let maxY = -Infinity;
+
+        for (const cmd of commands) {
+            if ('y' in cmd) {
+                minY = Math.min(minY, cmd.y);
+                maxY = Math.max(maxY, cmd.y);
+            }
+
+            if (cmd.y1 !== undefined) {
+                minY = Math.min(minY, cmd.y1);
+                maxY = Math.max(maxY, cmd.y1);
+            }
+            if (cmd.y2 !== undefined) {
+                minY = Math.min(minY, cmd.y2);
+                maxY = Math.max(maxY, cmd.y2);
+            }
+        }
+
+        this.height = maxY - minY;
+    }
+
+    translate(delta) {
+        this.points.forEach(point => {
+            point.x += delta.x;
+            point.y += delta.y;
+        })
+
         this.commands = this.generateCommands();
         this.notifyListeners();
     }

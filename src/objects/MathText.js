@@ -12,6 +12,8 @@ export class MathText extends GraphicalObject {
         this.latex = latex;
         this.fontSize = options.fontSize || defaultOptions.fontSize;
         this.commands = this.generateCommands();
+        this.setWidth();
+        this.setHeight();
     }
 
     generateCommands() {

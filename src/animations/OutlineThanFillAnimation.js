@@ -11,15 +11,15 @@ export class OutlineThanFillAnimation extends Animation {
 
         this.fillFadeDuration = fillFadeDuration;
 
-        this.points = graphicalObject.getCommands();
+        this.commands = graphicalObject.getCommands();
         this.totalLength = 0;
         this.segmentLengths = [];
-        for (let i = 1; i < this.points.length; i++) {
-            if (this.points[i].type === 'Z' || this.points[i - 1].type === 'Z') {
+        for (let i = 1; i < this.commands.length; i++) {
+            if (this.commands[i].type === 'Z' || this.commands[i - 1].type === 'Z') {
                 continue;
             }
-            const dx = this.points[i].x - this.points[i - 1].x;
-            const dy = this.points[i].y - this.points[i - 1].y;
+            const dx = this.commands[i].x - this.commands[i - 1].x;
+            const dy = this.commands[i].y - this.commands[i - 1].y;
             const len = Math.hypot(dx, dy);
             this.segmentLengths.push(len);
             this.totalLength += len;
@@ -41,7 +41,7 @@ export class OutlineThanFillAnimation extends Animation {
                 outlineProgress = 1;
             }
 
-            drawOutline(ctx, this.points, this.segmentLengths, this.totalLength, outlineProgress, {
+            drawOutline(ctx, this.commands, this.segmentLengths, this.totalLength, outlineProgress, {
                 borderColor: this.graphicalObject.borderColor,
                 fillColor: this.graphicalObject.fillColor,
                 lineWidth: this.graphicalObject.lineWidth
@@ -54,7 +54,7 @@ export class OutlineThanFillAnimation extends Animation {
                 return false;
             }
 
-            fadeInFill(ctx, this.points, fillProgress, {
+            fadeInFill(ctx, this.commands, fillProgress, {
                 borderColor: this.graphicalObject.borderColor,
                 fillColor: this.graphicalObject.fillColor,
                 lineWidth: this.graphicalObject.lineWidth
