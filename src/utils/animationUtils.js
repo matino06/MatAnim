@@ -1,5 +1,5 @@
-import { rgbToRgba } from "../core/utils.js";
 import { applyPathCommand } from "../utils/graphicalUtils.js";
+import Color from "color";
 
 /** 
  * Draws a partial outline of a path based on the given progress.
@@ -54,7 +54,7 @@ export function fadeInFill(ctx, commands, fillProgress, { borderColor, fillColor
     }
 
     ctx.strokeStyle = borderColor;
-    ctx.fillStyle = rgbToRgba(fillColor, fillProgress);
+    ctx.fillStyle = Color(fillColor).alpha(fillProgress).string();
     ctx.lineWidth = lineWidth;
     ctx.stroke();
     ctx.fill();
