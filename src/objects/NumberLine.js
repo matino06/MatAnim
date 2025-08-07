@@ -6,6 +6,11 @@ import { theme } from "../theme/theme";
 export class NumberLine extends GraphicalObjectComposit {
     constructor(points, range, options = {}) {
         NumberLine.validateTicks(options.ticks, range);
+
+        const allowedRotations = [0, 90];
+        if (options.rotation && !allowedRotations.includes(options.rotation)) {
+            throw new Error("Given Rotation not Supported!");
+        }
         super(points, options);
 
         this.range = range;
@@ -16,6 +21,7 @@ export class NumberLine extends GraphicalObjectComposit {
         const defaultOptions = {
             rotation: 0,
             hasTicks: true,
+            hasMidTicks: true,
             ticks: null,
             tickStep: null,
             skipTicks: [],
@@ -51,6 +57,10 @@ export class NumberLine extends GraphicalObjectComposit {
                 this.tickLabels = this.options.tickLabels;
             }
             this.setTicks(ticks);
+            if (this.options.hasMidTicks) {
+                this.setMidTicks();
+            }
+            this.filterTicks();
         }
 
         if (this.options.hasLabels) {
@@ -117,19 +127,7 @@ export class NumberLine extends GraphicalObjectComposit {
         // Calculate based on line length and tick density
         const [p0, p1] = this.points;
         const lineLength = this.getLineLength();
-        this.options.labelFontSize = Math.max(
-            8, // Minimum font size
-            this.options.fontScaleFactor * (minTickStep * lineLength),
-        );
-    }
-
-    pointToCoords(value) {
-        const [min, max] = this.range;
-        const t = (value - min) / (max - min);
-        return {
-            x: this.points[0].x + t * (this.points[1].x - this.points[0].x),
-            y: this.points[0].y + t * (this.points[1].y - this.points[0].y)
-        };
+        this.options.labelFontSize = this.options.fontScaleFactor * (minTickStep * lineLength);
     }
 
     calculateDefaultTicks() {
@@ -169,6 +167,41 @@ export class NumberLine extends GraphicalObjectComposit {
         return ticks;
     }
 
+
+    filterTicks() {
+        const arrowAngleRad = this.options.arrowAngle * Math.PI / 180;
+        const arrowLength = this.options.arrowLength * Math.cos(arrowAngleRad);
+        const arrowMargine = 5;
+
+        let countToRemoveTicks = 0;
+        const numberLineEndCoords = this.points[1];
+        this.ticks.forEach(tick => {
+            const tickCoords = tick.position;
+            const tickToEndDistance = Math.hypot(numberLineEndCoords.x - tickCoords.x, numberLineEndCoords.y - tickCoords.y);
+
+            if (tickToEndDistance < arrowLength + arrowMargine) {
+                countToRemoveTicks++;
+            }
+        })
+
+        if (countToRemoveTicks > 0) {
+            this.ticks.splice(-countToRemoveTicks);
+        }
+
+        if (this.options.hasArrow && this.ticks[0].value === this.range[0]) {
+            this.ticks.shift();
+        }
+    }
+
+
+    pointToCoords(value) {
+        const [min, max] = this.range;
+        const t = (value - min) / (max - min);
+        return {
+            x: this.points[0].x + t * (this.points[1].x - this.points[0].x),
+            y: this.points[0].y + t * (this.points[1].y - this.points[0].y)
+        };
+    }
 
     /////////////////////////
     /* GETTERS AND SETTERS */
@@ -211,6 +244,26 @@ export class NumberLine extends GraphicalObjectComposit {
         }
     }
 
+    setMidTicks() {
+        // Can't set mid ticks if there is no tick step
+        if (!this.options.tickStep) {
+            return;
+        }
+
+        this.midTicks = [];
+        const [min, max] = this.range;
+        const step = this.options.tickStep;
+        let current = min + step / 2;
+
+        while (current < max) {
+            this.midTicks.push({
+                value: current,
+                position: this.pointToCoords(current),
+            });
+            current += step;
+        }
+    }
+
     setTickLabels(tickLabels) {
         if (this.ticks.length != tickLabels.length) {
             throw new Error("Number of tick labels doesn't equal the number of ticks!");
@@ -241,6 +294,9 @@ export class NumberLine extends GraphicalObjectComposit {
         if (this.options.hasLabels) {
             this.addTickLabelsToChldren();
         }
+        if (this.options.hasMidTicks && this.options.tickStep) {
+            this.addMidTicksToChildren();
+        }
         if (this.options.label) {
             this.addLabelToChildren();
         }
@@ -251,7 +307,7 @@ export class NumberLine extends GraphicalObjectComposit {
 
     addLineToChildren() {
         const line = new Line(structuredClone(this.points), {
-            lineWidth: this.options.lineWidth
+            lineWidth: this.options.lineWidth,
         });
         this.children.push(line);
     }
@@ -271,9 +327,44 @@ export class NumberLine extends GraphicalObjectComposit {
             ];
 
             this.children.push(new Line(tickPoints, {
-                lineWidth: this.tickWidth
+                lineWidth: this.tickWidth,
             }));
         }
+    }
+
+    addMidTicksToChildren() {
+        this.midTicks.forEach(midTick => {
+            const center = midTick.position;
+
+            const tickPoints = []
+            if (this.options.rotation === 90) {
+                tickPoints.push(
+                    {
+                        x: center.x,
+                        y: center.y - this.tickHeight / 2
+                    },
+                    {
+                        x: center.x,
+                        y: center.y + this.tickHeight / 2
+                    }
+                )
+            } else {
+                tickPoints.push(
+                    {
+                        x: center.x,
+                        y: center.y - this.tickHeight / 4
+                    },
+                    {
+                        x: center.x,
+                        y: center.y + this.tickHeight / 4
+                    }
+                )
+            }
+
+            this.children.push(new Line(tickPoints, {
+                lineWidth: this.options.rotation === 90 ? this.tickWidth / 2 : this.tickWidth,
+            }));
+        })
     }
 
     addTickLabelsToChldren() {
@@ -293,6 +384,8 @@ export class NumberLine extends GraphicalObjectComposit {
                 tick.label.toString(),
                 {
                     fontSize: this.options.labelFontSize,
+                    fillColor: this.options.tickLabelColor,
+                    borderColor: this.options.tickLabelColor,
                 }
             );
 
@@ -346,6 +439,7 @@ export class NumberLine extends GraphicalObjectComposit {
     }
 
     addLabelToChildren() {
+        const fontSize = this.options.labelFontSize;
         const axisLabel = new MathText(
             [{
                 x: this.points[1].x - this.tickLabelXOffset,
@@ -353,17 +447,23 @@ export class NumberLine extends GraphicalObjectComposit {
             }],
             this.options.label.toString(),
             {
-                fontSize: this.options.labelFontSize * (this.options.label == 'x' ? 0.85 : 1),
+                fontSize: this.options.labelFontSize * (this.options.label == 'x\\text{-os}' ? 0.85 : 1),
                 borderColor: theme.colors.text,
                 fillColor: theme.colors.text,
             }
         );
 
+        // Scale font to equal 
+        if (fontSize != axisLabel.height) {
+            const scalingFactor = axisLabel.height / fontSize;
+            axisLabel.setFontSize(fontSize * scalingFactor);
+        }
+
         // Adjust tick label alignment
         if (this.options.rotation % 180 === 0) { // Horizontal
-            axisLabel.translate({ x: -axisLabel.width * 2.5, y: -axisLabel.height });
+            axisLabel.translate({ x: -axisLabel.width * 1.2, y: -axisLabel.height });
         } else { // Vertical
-            axisLabel.translate({ x: -axisLabel.width / 2, y: axisLabel.height });
+            axisLabel.translate({ x: 0, y: axisLabel.height });
         }
 
         this.children.push(axisLabel);

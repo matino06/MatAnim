@@ -38,6 +38,8 @@ export class CoordinateSystem extends GraphicalObjectComposit {
             skipLastLabel: false,
             hasGrid: true,
             hasBorder: true,
+            xAxisLabel: 'x',
+            yAxisLabel: 'y',
         };
 
         this.options = { ...defaultOptions, ...options };
@@ -93,6 +95,8 @@ export class CoordinateSystem extends GraphicalObjectComposit {
             tickWidth: this.options.tickHeight.tickWidth,
             lineWidth: this.options.tickHeight.lineWidth,
             constructImmediately: false,
+            label: this.options.xAxisLabel,
+            tickLabelColor: this.options.tickLabelColor,
         })
         this.children.push(xAxis)
 
@@ -145,7 +149,8 @@ export class CoordinateSystem extends GraphicalObjectComposit {
             tickWidth: this.options.tickWidth,
             lineWidth: this.options.lineWidth,
             constructImmediately: false,
-            label: 'y'
+            label: this.options.yAxisLabel,
+            tickLabelColor: this.options.tickLabelColor,
         },);
         this.children.push(yAxis);
 
@@ -170,7 +175,6 @@ export class CoordinateSystem extends GraphicalObjectComposit {
     }
 
     addGridToChildren(xAxis, yAxis, gridLineColor) {
-
         const addGridLines = (ticks, lineStart, lineEnd, axisType) => {
             ticks.forEach(tick => {
                 let start, end;

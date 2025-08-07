@@ -24,6 +24,11 @@ export class MathText extends GraphicalObject {
         );
     }
 
+    setFontSize(fontSize) {
+        this.fontSize = fontSize;
+        this.commands = this.generateCommands();
+    }
+
     getPosition() {
         return { x: this.points[0].x, y: this.points[0].y + this.fontSize };
     }
