@@ -20,6 +20,15 @@ export class GraphicalObjectComposit extends GraphicalObject {
         this.notifyListeners();
     }
 
+    scale(xScale = this.lastXScale, yScale = this.lastYScale) {
+        this.children.forEach(child => {
+            child.scale(xScale, yScale);
+        })
+
+        this.lastXScale = xScale;
+        this.lastYScale = yScale;
+    }
+
     render(ctx) {
         this.children.forEach(child => child.render(ctx));
     }
