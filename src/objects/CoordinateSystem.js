@@ -175,7 +175,7 @@ export class CoordinateSystem extends GraphicalObjectComposit {
     }
 
     addGridToChildren(xAxis, yAxis, gridLineColor) {
-        const addGridLines = (ticks, lineStart, lineEnd, axisType) => {
+        const addGridLines = (ticks, lineStart, lineEnd, axisType, opacity) => {
             ticks.forEach(tick => {
                 let start, end;
 
@@ -202,7 +202,7 @@ export class CoordinateSystem extends GraphicalObjectComposit {
                 }
 
                 const gridLine = new Line([start, end], {
-                    borderColor: gridLineColor.alpha(0.2).string()
+                    borderColor: gridLineColor.alpha(opacity).string()
                 });
 
                 this.children.unshift(gridLine);
@@ -212,14 +212,24 @@ export class CoordinateSystem extends GraphicalObjectComposit {
         const xTicks = xAxis.ticks;
         const yAxisStart = yAxis.points[0];
         const yAxisEnd = yAxis.points[1];
+        const tickLineOpacity = 0.2;
 
-        addGridLines(xTicks, yAxisStart, yAxisEnd, 'x');
+        addGridLines(xTicks, yAxisStart, yAxisEnd, 'x', tickLineOpacity);
 
         const yTicks = yAxis.ticks;
         const xAxisStart = xAxis.points[0];
         const xAxisEnd = xAxis.points[1];
 
-        addGridLines(yTicks, xAxisStart, xAxisEnd, 'y');
+        addGridLines(yTicks, xAxisStart, xAxisEnd, 'y', tickLineOpacity);
+
+        // If x and y axis have mid ticks add mid tick lines
+        const xMidTicks = xAxis.midTicks;
+        const yMidTicks = yAxis.midTicks;
+        if (xMidTicks && yMidTicks) {
+            const midTickLineOpacity = 0.1;
+            addGridLines(xMidTicks, yAxisStart, yAxisEnd, 'x', midTickLineOpacity);
+            addGridLines(yMidTicks, xAxisStart, xAxisEnd, 'y', midTickLineOpacity);
+        }
     }
 
 }
