@@ -2,19 +2,24 @@ import { Animation } from "../core/Animation.js"
 import { drawOutline, fadeInFill } from "../utils/animationUtils.js";
 
 export class OutlineThanFillAnimation extends Animation {
-    constructor(graphicalObject, duration = 500, fillFadeDuration = 500) {
-        super(graphicalObject, duration)
+    constructor(graphicalObject, options = {}) {
+        const outlineDefaults = {
+            fillFadeDuration: 2000
+        };
+
+        super(graphicalObject, options);
+
+        this.options = { ...outlineDefaults, ...this.options };
 
         if (!graphicalObject.getCommands()) {
             return;
         }
 
         this.fill = graphicalObject.fill;
-        this.fillFadeDuration = fillFadeDuration;
-
         this.commands = graphicalObject.getCommands();
         this.totalLength = 0;
         this.segmentLengths = [];
+
         for (let i = 1; i < this.commands.length; i++) {
             if (this.commands[i].type === 'Z' || this.commands[i - 1].type === 'Z') {
                 continue;
@@ -35,7 +40,7 @@ export class OutlineThanFillAnimation extends Animation {
         const ctx = this.scene.ctx;
 
         if (this.phase === "line") {
-            let outlineProgress = elapsed / this.duration;
+            let outlineProgress = elapsed / this.options.duration;
             if (outlineProgress > 1 && !this.fill) {
                 this.scene.add(this.graphicalObject, true);
                 return false;
@@ -46,25 +51,25 @@ export class OutlineThanFillAnimation extends Animation {
                 outlineProgress = 1;
             }
 
-            drawOutline(ctx, this.commands, this.segmentLengths, this.totalLength, this.easingFunction(outlineProgress), {
+            drawOutline(ctx, this.commands, this.segmentLengths, this.totalLength,
+                this.options.easingFunction(outlineProgress), {
                 borderColor: this.graphicalObject.borderColor,
                 fillColor: this.graphicalObject.fillColor,
                 lineWidth: this.graphicalObject.lineWidth
             });
             return true;
         } else if (this.phase === "fill") {
-            let fillProgress = (elapsed) / this.fillFadeDuration;
+            let fillProgress = elapsed / this.options.fillFadeDuration;
             if (fillProgress > 1) {
                 this.scene.add(this.graphicalObject, true);
                 return false;
             }
 
-            fadeInFill(ctx, this.commands, fillProgress,
-                {
-                    borderColor: this.graphicalObject.borderColor,
-                    fillColor: this.graphicalObject.fillColor,
-                    lineWidth: this.graphicalObject.lineWidth
-                });
+            fadeInFill(ctx, this.commands, fillProgress, {
+                borderColor: this.graphicalObject.borderColor,
+                fillColor: this.graphicalObject.fillColor,
+                lineWidth: this.graphicalObject.lineWidth
+            });
             return true;
         }
     }

@@ -10,10 +10,10 @@ export class AnimationManager {
     add(animation) {
         if (animation.graphicalObjectIsComposite()) {
             const AnimationClass = animation.constructor;
-            const animationDuration = animation.duration;
+            const animationOptions = animation.options;
             const compositeObject = animation.graphicalObject;
             compositeObject.children.forEach(child => {
-                const childAnimation = new AnimationClass(child, animationDuration);
+                const childAnimation = new AnimationClass(child, animationOptions);
                 this.add(childAnimation);
             });
 

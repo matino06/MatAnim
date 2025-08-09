@@ -1,19 +1,19 @@
-
+import { easeInOutSine } from "./easingFunctions";
 
 export class Animation {
-    constructor(graphicalObject, duration = 500) {
+    constructor(graphicalObject, options = {}) {
         if (new.target === Animation) {
             throw new Error("Animation is abstract and cannot be instantiated directly.");
         }
+
+        const defaultOptions = {
+            duration: 1000,
+            easingFunction: (x) => { return x; }
+        };
+
+        this.options = { ...defaultOptions, ...options };
         this.graphicalObject = graphicalObject;
-        this.duration = duration;
         this.startTime = null;
-
-        const easingFunction = (x) => {
-            return -(Math.cos(Math.PI * x) - 1) / 2;
-        }
-
-        this.easingFunction = easingFunction;
     }
 
     setScene(scene) {

@@ -12,4 +12,6 @@ export { NumberLine } from './objects/NumberLine.js';
 export { CoordinateSystem } from './objects/CoordinateSystem.js';
 export { FunctionPlot } from './objects/FunctionPlot.js';
 
+export * from './core/easingFunctions.js';
+
 export { OutlineThanFillAnimation } from './animations/OutlineThanFillAnimation.js';

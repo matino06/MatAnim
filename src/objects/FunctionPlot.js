@@ -4,8 +4,8 @@ import { theme } from "../theme/theme";
 export class FunctionPlot extends GraphicalObject {
     constructor(coordinateSystem, func, options = {}) {
         const defaultOptions = {
-            lineWidth: 3,
-            step: 0.01,
+            lineWidth: 2,
+            step: 0.1,
         }
 
         options = { ...defaultOptions, ...options };
