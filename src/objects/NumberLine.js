@@ -29,26 +29,25 @@ export class NumberLine extends GraphicalObjectComposit {
             tickLabels: null,
             skipFirstLabel: false,
             skipLastLabel: false,
-            tickHeight: 25,
-            tickWidth: 2,
-            lineWidth: 2,
+            tickHeight: null,
+            tickWidth: null,
+            lineWidth: null,
             labelFontSize: null,
             label: 'x',
             hasArrow: true,
-            arrowLength: 25,
+            arrowLength: null,
             arrowAngle: 30,
-            arrowLineWidth: 2,
             autoFontScaling: true,
             fontScaleFactor: 0.012,
             constructImmediately: true,
         };
 
         this.options = { ...defaultOptions, ...options };
-        this.configureDimensions();
 
         if (this.options.hasTicks) {
             let ticks;
             if (this.options.ticks) {
+                this.options.tickStep = null;
                 ticks = this.options.ticks;
             } else {
                 ticks = this.calculateDefaultTicks();
@@ -60,12 +59,15 @@ export class NumberLine extends GraphicalObjectComposit {
             if (this.options.hasMidTicks) {
                 this.setMidTicks();
             }
+
             this.filterTicks();
         }
 
         if (this.options.hasLabels) {
             this.determineFontSize();
         }
+
+        this.configureDimensions();
 
         if (this.options.constructImmediately) {
             this.constructTheNumberLine();
@@ -85,6 +87,32 @@ export class NumberLine extends GraphicalObjectComposit {
     }
 
     configureDimensions() {
+        if (!this.options.tickHeight) {
+            const labelSizeToTickHeightScalingFactor = 1.5;
+            this.options.tickHeight = this.options.labelFontSize * labelSizeToTickHeightScalingFactor;
+        }
+
+        if (!this.options.tickWidth) {
+            const tickHeightToTickWidthScalingFactor = 0.07;
+            this.options.tickWidth = Math.max(
+                1,
+                this.options.tickHeight * tickHeightToTickWidthScalingFactor,
+            );
+        }
+
+        if (!this.options.lineWidth) {
+            const tickHeightToLineWidthScalingFactor = 0.07;
+            this.options.lineWidth = Math.max(
+                1,
+                this.options.tickHeight * tickHeightToLineWidthScalingFactor,
+            );
+        }
+
+        if (!this.options.arrowLength) {
+            const labelSizeToArrowLengthScalingFactor = 1.5;
+            this.options.arrowLength = this.options.labelFontSize * labelSizeToArrowLengthScalingFactor;
+        }
+
         const { rotation, tickHeight, tickWidth } = this.options;
 
         if (rotation % 90 !== 0) {
@@ -111,23 +139,25 @@ export class NumberLine extends GraphicalObjectComposit {
 
         let minTickStep = Infinity;
 
-        if (!this.tickStep) {
+        if (!this.options.tickStep) {
             if (this.ticks.length < 2) minTickStep = 2;
 
             for (let i = 1; i < this.ticks.length; i++) {
-                let step = this.ticks[i] - this.ticks[i - 1];
+                let step = this.ticks[i].value - this.ticks[i - 1].value;
                 if (step < minTickStep) {
                     minTickStep = step;
                 }
             }
         } else {
-            minTickStep = this.tickStep;
+            minTickStep = this.options.tickStep;
         }
+
+        const minTickStepSqrt = Math.pow(minTickStep, 1 / 2);
 
         // Calculate based on line length and tick density
         const [p0, p1] = this.points;
         const lineLength = this.getLineLength();
-        this.options.labelFontSize = this.options.fontScaleFactor * (minTickStep * lineLength);
+        this.options.labelFontSize = this.options.fontScaleFactor * (minTickStepSqrt * lineLength);
     }
 
     calculateDefaultTicks() {
@@ -139,8 +169,8 @@ export class NumberLine extends GraphicalObjectComposit {
             return [{ value: min, position: this.pointToCoords(min) }];
         }
 
-        this.tickStep = this.options.tickStep;
-        if (!this.tickStep) {
+        this.options.tickStep = this.options.tickStep;
+        if (!this.options.tickStep) {
             // Calculate optimal tick spacing
             const targetTicks = 10;
             const rawStep = rangeSpan / targetTicks;
@@ -150,18 +180,18 @@ export class NumberLine extends GraphicalObjectComposit {
             // "Nice" step values (1, 2, 5, 10)
             const niceSteps = [1, 2, 5, 10];
             const step = niceSteps.find(s => s >= normalizedStep) * stepPower || stepPower * 10;
-            this.tickStep = step;
+            this.options.tickStep = step;
         }
 
         // Generate tick values
-        let current = Math.ceil(min / this.tickStep) * this.tickStep;
+        let current = Math.ceil(min / this.options.tickStep) * this.options.tickStep;
         const ticks = [];
 
         while (current <= max) {
             if (!this.options.skipTicks.includes(current)) {
                 ticks.push(current);
             }
-            current += this.tickStep;
+            current += this.options.tickStep;
         }
 
         return ticks;
@@ -253,7 +283,7 @@ export class NumberLine extends GraphicalObjectComposit {
         this.midTicks = [];
         const [min, max] = this.range;
         const step = this.options.tickStep;
-        let current = min + step / 2;
+        let current = this.ticks[0].value + step / 2;
 
         while (current < max) {
             this.midTicks.push({
@@ -401,7 +431,7 @@ export class NumberLine extends GraphicalObjectComposit {
     }
 
     addArrowToChildren() {
-        const { arrowLength, arrowAngle, arrowLineWidth } = this.options;
+        const { arrowLength, arrowAngle, lineWidth } = this.options;
         const [p0, p1] = this.points;
 
         // Izračunaj vektor smjera
@@ -432,8 +462,8 @@ export class NumberLine extends GraphicalObjectComposit {
         };
 
         // Kreiraj linije za strelicu
-        const arrowLine1 = new Line([structuredClone(p1), arrowPoint1], { lineWidth: arrowLineWidth });
-        const arrowLine2 = new Line([structuredClone(p1), arrowPoint2], { lineWidth: arrowLineWidth });
+        const arrowLine1 = new Line([structuredClone(p1), arrowPoint1], { lineWidth: lineWidth });
+        const arrowLine2 = new Line([structuredClone(p1), arrowPoint2], { lineWidth: lineWidth });
 
         this.children.push(arrowLine1, arrowLine2);
     }

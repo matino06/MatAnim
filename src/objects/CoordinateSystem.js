@@ -28,9 +28,9 @@ export class CoordinateSystem extends GraphicalObjectComposit {
             hasLabels: true,
             xTickLabels: null,
             yTickLabels: null,
-            tickHeight: 25,
-            tickWidth: 2,
-            lineWidth: 2,
+            tickHeight: null,
+            tickWidth: null,
+            lineWidth: null,
             labelFontSize: null,
             autoFontScaling: true,
             fontScaleFactor: 0.025,
@@ -92,8 +92,8 @@ export class CoordinateSystem extends GraphicalObjectComposit {
             skipLastLabel: this.options.skipLastLabel,
             labelFontSize: this.options.labelFontSize,
             tickHeight: this.options.tickHeight,
-            tickWidth: this.options.tickHeight.tickWidth,
-            lineWidth: this.options.tickHeight.lineWidth,
+            tickWidth: this.options.tickWidth,
+            lineWidth: this.options.lineWidth,
             constructImmediately: false,
             label: this.options.xAxisLabel,
             tickLabelColor: this.options.tickLabelColor,
@@ -212,7 +212,7 @@ export class CoordinateSystem extends GraphicalObjectComposit {
         const xTicks = xAxis.ticks;
         const yAxisStart = yAxis.points[0];
         const yAxisEnd = yAxis.points[1];
-        const tickLineOpacity = 0.2;
+        const tickLineOpacity = 0.25;
 
         addGridLines(xTicks, yAxisStart, yAxisEnd, 'x', tickLineOpacity);
 
@@ -222,11 +222,11 @@ export class CoordinateSystem extends GraphicalObjectComposit {
 
         addGridLines(yTicks, xAxisStart, xAxisEnd, 'y', tickLineOpacity);
 
-        // If x and y axis have mid ticks add mid tick lines
+        // If x and y axis have mid ticks add mid tick lines to grid
         const xMidTicks = xAxis.midTicks;
         const yMidTicks = yAxis.midTicks;
         if (xMidTicks && yMidTicks) {
-            const midTickLineOpacity = 0.1;
+            const midTickLineOpacity = 0.15;
             addGridLines(xMidTicks, yAxisStart, yAxisEnd, 'x', midTickLineOpacity);
             addGridLines(yMidTicks, xAxisStart, xAxisEnd, 'y', midTickLineOpacity);
         }
