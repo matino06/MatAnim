@@ -6,7 +6,6 @@ export class Line extends GraphicalObject {
         const defaultOptions = {
             borderColor: theme.colors.foreground,
             fillColor: theme.colors.foreground,
-            lineWidth: theme.lineWidth
         }
 
         super(points, { ...defaultOptions, ...options });

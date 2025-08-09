@@ -46,7 +46,7 @@ export class OutlineThanFillAnimation extends Animation {
                 outlineProgress = 1;
             }
 
-            drawOutline(ctx, this.commands, this.segmentLengths, this.totalLength, outlineProgress, {
+            drawOutline(ctx, this.commands, this.segmentLengths, this.totalLength, this.easingFunction(outlineProgress), {
                 borderColor: this.graphicalObject.borderColor,
                 fillColor: this.graphicalObject.fillColor,
                 lineWidth: this.graphicalObject.lineWidth

@@ -1,3 +1,5 @@
+
+
 export class Animation {
     constructor(graphicalObject, duration = 500) {
         if (new.target === Animation) {
@@ -6,6 +8,12 @@ export class Animation {
         this.graphicalObject = graphicalObject;
         this.duration = duration;
         this.startTime = null;
+
+        const easingFunction = (x) => {
+            return -(Math.cos(Math.PI * x) - 1) / 2;
+        }
+
+        this.easingFunction = easingFunction;
     }
 
     setScene(scene) {

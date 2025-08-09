@@ -64,6 +64,13 @@ export class CoordinateSystem extends GraphicalObjectComposit {
     }
 
     pointToCoords(x, y) {
+        if (this.xRange[0] > x || this.xRange[1] < x) {
+            return undefined;
+        }
+        if (this.yRange[0] > y || this.yRange[1] < y) {
+            return undefined;
+        }
+
         const xAxis = this.children[this.children.length - 2];
         const yAxis = this.children[this.children.length - 1];
 
@@ -138,7 +145,7 @@ export class CoordinateSystem extends GraphicalObjectComposit {
             rotation: 90,
             hasTicks: this.options.hasTicks,
             ticks: this.options.yTicks,
-            tickStep: xAxis.tickStep,
+            tickStep: xAxis.options.tickStep,
             skipTicks: [0],
             hasLabels: this.options.hasLabels,
             tickLabels: this.options.yTickLabels,
