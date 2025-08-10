@@ -6,6 +6,7 @@ export { Scene } from './core/Scene.js';
 export { Circle } from './objects/Circle.js';
 export { Rectangle } from './objects/Rectangle.js';
 export { Line } from './objects/Line.js';
+export { Vector } from './objects/Vector.js';
 export { Text } from './objects/Text.js';
 export { MathText } from './objects/MathText.js';
 export { NumberLine } from './objects/NumberLine.js';

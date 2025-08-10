@@ -24,7 +24,7 @@ export class Scene {
         this.resize(true);
 
         if (autoResize) {
-            window.addEventListener('resize', () => this.resize());
+            window.addEventListener('resize', () => this.resize(true));
         }
     }
 

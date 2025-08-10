@@ -136,8 +136,8 @@ export class GraphicalObject {
             prevControl: null
         };
 
-        // ctx.lineJoin = 'round';
-        // ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.lineCap = 'round';
 
         ctx.beginPath();
 
