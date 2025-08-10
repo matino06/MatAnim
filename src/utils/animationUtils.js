@@ -14,7 +14,8 @@ export function drawOutline(ctx, commands, segmentLengths, totalLength, outlineP
         currentY: commands[0].y || 0,
         prevControl: null
     };
-
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
     ctx.beginPath();
     ctx.moveTo(commands[0].x, commands[0].y);
 
@@ -45,7 +46,8 @@ export function fadeInFill(ctx, commands, fillProgress, { borderColor, fillColor
         currentY: commands[0].y || 0,
         prevControl: null
     };
-
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
     ctx.beginPath();
     ctx.moveTo(commands[0].x, commands[0].y);
 

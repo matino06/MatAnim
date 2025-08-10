@@ -4,7 +4,7 @@ import { drawOutline, fadeInFill } from "../utils/animationUtils.js";
 export class OutlineThanFillAnimation extends Animation {
     constructor(graphicalObject, options = {}) {
         const outlineDefaults = {
-            fillFadeDuration: 2000
+            fillFadeDuration: 1000
         };
 
         super(graphicalObject, options);
@@ -51,12 +51,21 @@ export class OutlineThanFillAnimation extends Animation {
                 outlineProgress = 1;
             }
 
-            drawOutline(ctx, this.commands, this.segmentLengths, this.totalLength,
-                this.options.easingFunction(outlineProgress), {
-                borderColor: this.graphicalObject.borderColor,
-                fillColor: this.graphicalObject.fillColor,
-                lineWidth: this.graphicalObject.lineWidth
-            });
+            const outlineProgresWithEasingFunction = this.options.easingFunction(outlineProgress);
+
+            drawOutline(
+                ctx,
+                this.commands,
+                this.segmentLengths,
+                this.totalLength,
+                outlineProgresWithEasingFunction,
+                {
+                    borderColor: this.graphicalObject.borderColor,
+                    fillColor: this.graphicalObject.fillColor,
+                    lineWidth: this.graphicalObject.lineWidth
+                }
+            );
+
             return true;
         } else if (this.phase === "fill") {
             let fillProgress = elapsed / this.options.fillFadeDuration;
@@ -65,11 +74,19 @@ export class OutlineThanFillAnimation extends Animation {
                 return false;
             }
 
-            fadeInFill(ctx, this.commands, fillProgress, {
-                borderColor: this.graphicalObject.borderColor,
-                fillColor: this.graphicalObject.fillColor,
-                lineWidth: this.graphicalObject.lineWidth
-            });
+            const fillProgresWithEasingFunction = this.options.easingFunction(fillProgress);
+
+            fadeInFill(
+                ctx,
+                this.commands,
+                fillProgresWithEasingFunction,
+                {
+                    borderColor: this.graphicalObject.borderColor,
+                    fillColor: this.graphicalObject.fillColor,
+                    lineWidth: this.graphicalObject.lineWidth
+                }
+            );
+
             return true;
         }
     }

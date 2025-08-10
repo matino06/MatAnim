@@ -121,11 +121,11 @@ export class NumberLine extends GraphicalObjectComposit {
 
         // Handle dimension swapping for vertical orientation
         const isVertical = rotation % 180 !== 0;
-        this.tickHeight = isVertical ? tickWidth : tickHeight;
-        this.tickWidth = isVertical ? tickHeight : tickWidth;
+        this.tickHeight = tickHeight;
+        this.tickWidth = tickWidth;
 
         // Configure tick label offsets
-        this.tickLabelXOffset = isVertical ? -this.tickWidth : 0;
+        this.tickLabelXOffset = isVertical ? -this.tickHeight : 0;
         this.tickLabelYOffset = isVertical ? 0 : this.tickHeight;
     }
 
@@ -345,16 +345,30 @@ export class NumberLine extends GraphicalObjectComposit {
     addTicksToChildren() {
         for (const tick of this.ticks) {
             const center = tick.position;
-            const tickPoints = [
-                {
-                    x: center.x,
-                    y: center.y - this.tickHeight / 2
-                },
-                {
-                    x: center.x,
-                    y: center.y + this.tickHeight / 2
-                }
-            ];
+            const tickPoints = []
+            if (this.options.rotation === 90) {
+                tickPoints.push(
+                    {
+                        x: center.x - this.tickHeight / 2,
+                        y: center.y,
+                    },
+                    {
+                        x: center.x + this.tickHeight / 2,
+                        y: center.y,
+                    }
+                )
+            } else {
+                tickPoints.push(
+                    {
+                        x: center.x,
+                        y: center.y - this.tickHeight / 2
+                    },
+                    {
+                        x: center.x,
+                        y: center.y + this.tickHeight / 2
+                    }
+                )
+            }
 
             this.children.push(new Line(tickPoints, {
                 lineWidth: this.tickWidth,
@@ -370,12 +384,12 @@ export class NumberLine extends GraphicalObjectComposit {
             if (this.options.rotation === 90) {
                 tickPoints.push(
                     {
-                        x: center.x,
-                        y: center.y - this.tickHeight / 2
+                        x: center.x - this.tickHeight / 4,
+                        y: center.y,
                     },
                     {
-                        x: center.x,
-                        y: center.y + this.tickHeight / 2
+                        x: center.x + this.tickHeight / 4,
+                        y: center.y,
                     }
                 )
             } else {
@@ -392,7 +406,7 @@ export class NumberLine extends GraphicalObjectComposit {
             }
 
             this.children.push(new Line(tickPoints, {
-                lineWidth: this.options.rotation === 90 ? this.tickWidth / 2 : this.tickWidth,
+                lineWidth: this.tickWidth,
             }));
         })
     }
@@ -483,7 +497,7 @@ export class NumberLine extends GraphicalObjectComposit {
             }
         );
 
-        // Scale font to equal 
+        // Scale font to equal
         if (fontSize != axisLabel.height) {
             const scalingFactor = axisLabel.height / fontSize;
             axisLabel.setFontSize(fontSize * scalingFactor);
