@@ -24,7 +24,7 @@ export class Scene {
         this.resize(true);
 
         if (autoResize) {
-            window.addEventListener('resize', () => this.resize(true));
+            window.addEventListener('resize', () => this.resize());
         }
     }
 
@@ -32,22 +32,12 @@ export class Scene {
         const cssWidth = this.canvas.clientWidth;
         const cssHeight = this.canvas.clientHeight;
         const dpr = window.devicePixelRatio || 1;
-
-        // Calculate physical resolution
         const displayWidth = Math.round(cssWidth * dpr);
         const displayHeight = Math.round(cssHeight * dpr);
 
-        if (this.canvas.width !== displayWidth || this.canvas.height !== displayHeight || forceDraw) {
+        if (displayWidth !== this.canvas.width || displayHeight !== this.canvas.height || forceDraw) {
             this.canvas.width = displayWidth;
             this.canvas.height = displayHeight;
-
-            // Set CSS dimesions to be the same
-            this.canvas.style.width = cssWidth + "px";
-            this.canvas.style.height = cssHeight + "px";
-
-            // Reset dimesions and scaling context
-            this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
             this.updateScaleParams();
             this.draw();
         }
@@ -64,11 +54,10 @@ export class Scene {
     }
 
     updateScaleParams() {
-        // CSS dimensions
-        const cssWidth = this.canvas.clientWidth;
-        const cssHeight = this.canvas.clientHeight;
+        const w = this.canvas.width;
+        const h = this.canvas.height;
 
-        if (cssWidth === 0 || cssHeight === 0) {
+        if (w === 0 || h === 0) {
             this.scaleX = 1;
             this.scaleY = 1;
             this.offsetX = 0;
@@ -76,16 +65,16 @@ export class Scene {
             return;
         }
 
-        const scaleX = cssWidth / this.expected_screen_width;
-        const scaleY = cssHeight / this.expected_screen_height;
+        const scaleX = w / this.expected_screen_width;
+        const scaleY = h / this.expected_screen_height;
 
         // Maintain aspect ratio with uniform scaling
         this.scaleX = Math.min(scaleX, scaleY);
         this.scaleY = this.scaleX;
 
         // Calculate centering offset
-        this.offsetX = (cssWidth - this.expected_screen_width * this.scaleX) / 2;
-        this.offsetY = (cssHeight - this.expected_screen_height * this.scaleY) / 2;
+        this.offsetX = (w - this.expected_screen_width * this.scaleX) / 2;
+        this.offsetY = (h - this.expected_screen_height * this.scaleY) / 2;
     }
 
 
@@ -100,6 +89,9 @@ export class Scene {
     }
 
     drawStaticObjects() {
+        if (this.scaleToScreen) {
+            this.resetTransformations();
+        }
         if (this.scaleToScreen) {
             this.applyTransformations();
         }

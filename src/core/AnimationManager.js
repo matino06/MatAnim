@@ -41,6 +41,11 @@ export class AnimationManager {
             // Clear and prepare canvas
             this.scene.draw()
 
+            // Reset transformations
+            if (this.scene.scaleToScreen) {
+                this.scene.resetTransformations();
+            }
+
             // Apply transformations for animations
             if (this.scene.scaleToScreen) {
                 this.scene.applyTransformations();
