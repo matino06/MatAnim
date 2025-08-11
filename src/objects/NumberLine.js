@@ -448,34 +448,33 @@ export class NumberLine extends GraphicalObjectComposit {
         const { arrowLength, arrowAngle, lineWidth } = this.options;
         const [p0, p1] = this.points;
 
-        // Izračunaj vektor smjera
+        // Calculate vector direction
         const dx = p1.x - p0.x;
         const dy = p1.y - p0.y;
         const length = Math.sqrt(dx * dx + dy * dy);
 
-        // Preskoči ako linija nema duljinu
+        // Skip if the line doesn't have length
         if (length === 0) return;
 
-        // Glavni kut linije u radijanima
+        // Angle of the arrow in radians
         const angle = Math.atan2(dy, dx);
 
-        // Izračunaj kutove za strelice
+        // Calculate angles for the arrow
         const arrowAngleRad = arrowAngle * Math.PI / 180;
         const angle1 = angle + Math.PI - arrowAngleRad;
         const angle2 = angle + Math.PI + arrowAngleRad;
 
-        // Izračunaj točke za strelice
+        // Calculate arrow points
         const arrowPoint1 = {
             x: p1.x + arrowLength * Math.cos(angle1),
             y: p1.y + arrowLength * Math.sin(angle1)
         };
-
         const arrowPoint2 = {
             x: p1.x + arrowLength * Math.cos(angle2),
             y: p1.y + arrowLength * Math.sin(angle2)
         };
 
-        // Kreiraj linije za strelicu
+        // Create lines for arrow
         const arrowLine1 = new Line([structuredClone(p1), arrowPoint1], { lineWidth: lineWidth });
         const arrowLine2 = new Line([structuredClone(p1), arrowPoint2], { lineWidth: lineWidth });
 

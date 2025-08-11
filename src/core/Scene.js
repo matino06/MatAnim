@@ -43,7 +43,6 @@ export class Scene {
         }
     }
 
-
     add(object, reDraw = true) {
         this.graphicalObjects.push(object);
         object.addListener(this.graphicalObjectListener);

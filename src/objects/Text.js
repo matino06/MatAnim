@@ -21,7 +21,7 @@ export class Text extends GraphicalObject {
         super(points, finalOptions);
         this.text = text;
         this.fontSize = finalOptions.fontSize;
-        this.commands = this.generateCommands();
+        this.generateCommands();
     }
 
     generateCommands() {
@@ -30,6 +30,6 @@ export class Text extends GraphicalObject {
 
         const path = font.getPath(this.text, position.x, position.y, this.fontSize);
 
-        return path.commands;
+        this.commands = path.commands;
     }
 }

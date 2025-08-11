@@ -93,7 +93,7 @@ export class GraphicalObject {
             point.y += delta.y;
         })
 
-        this.commands = this.generateCommands();
+        this.generateCommands();
         this.notifyListeners();
     }
 
@@ -129,7 +129,7 @@ export class GraphicalObject {
         const points = this.getCommands();
         if (points.length === 0) return;
 
-        // Initialize stanje
+        // Initialize state
         const state = {
             currentX: 0,
             currentY: 0,

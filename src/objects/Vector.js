@@ -6,7 +6,7 @@ export class Vector extends GraphicalObject {
             lineWidth: 2,
             arrowheadSize: 20,
             arrowheadAngle: 30,
-            vectorBodyWidth: 2
+            vectorBodyWidth: 1.5
         };
 
         options = { ...defaultOptions, ...options };
@@ -20,7 +20,7 @@ export class Vector extends GraphicalObject {
         this.arrowheadSize = options.arrowheadSize;
         this.arrowheadAngle = options.arrowheadAngle * (Math.PI / 180); // Convert to radians
 
-        this.commands = this.generateCommands();
+        this.generateCommands();
     }
 
     generateCommands() {
@@ -78,6 +78,6 @@ export class Vector extends GraphicalObject {
         commands.push({ type: "L", x: arrowPoint2.x, y: arrowPoint2.y });
         commands.push({ type: "L", x: this.end.x, y: this.end.y });
 
-        return commands;
+        this.commands = commands;
     }
 }

@@ -11,22 +11,23 @@ export class MathText extends GraphicalObject {
         super(points, { ...defaultOptions, ...options });
         this.latex = latex;
         this.fontSize = options.fontSize || defaultOptions.fontSize;
-        this.commands = this.generateCommands();
-        this.setWidth();
-        this.setHeight();
+        this.generateCommands();
     }
 
     generateCommands() {
-        return convertSvgToCommands(
+        this.commands = convertSvgToCommands(
             this.latex,
             this.fontSize,
             this.getPosition()
         );
+        this.setWidth();
+        this.setHeight();
     }
+
 
     setFontSize(fontSize) {
         this.fontSize = fontSize;
-        this.commands = this.generateCommands();
+        this.generateCommands();
     }
 
     getPosition() {

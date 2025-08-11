@@ -5,7 +5,7 @@ export class Rectangle extends GraphicalObject {
         super(points, options);
         this.width = width;
         this.height = height;
-        this.commands = this.generateCommands();
+        this.generateCommands();
     }
 
     generateCommands() {
@@ -18,7 +18,7 @@ export class Rectangle extends GraphicalObject {
             y: center.y - halfHeight
         };
 
-        return [
+        this.commands = [
             { type: 'L', x: topLeft.x, y: topLeft.y },
             { type: 'L', x: topLeft.x + this.width, y: topLeft.y },
             { type: 'L', x: topLeft.x + this.width, y: topLeft.y + this.height },
