@@ -9,6 +9,8 @@ export { Line } from './objects/Line.js';
 export { Vector } from './objects/Vector.js';
 export { Text } from './objects/Text.js';
 export { MathText } from './objects/MathText.js';
+export { RandolphBody } from './objects/RandolphBody.js'
+
 export { NumberLine } from './objects/NumberLine.js';
 export { CoordinateSystem } from './objects/CoordinateSystem.js';
 export { FunctionPlot } from './objects/FunctionPlot.js';
