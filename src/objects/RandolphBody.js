@@ -1,5 +1,5 @@
 import { GraphicalObject } from "../core/GraphicalObject"
-import { getQuadraticBezierPoints, getQuarticBezierPoints } from "../utils/geometryUtils";
+import { getBezierPoints } from "../utils/geometryUtils";
 import { theme } from "../theme/theme";
 
 export class RandolphBody extends GraphicalObject {
@@ -15,19 +15,20 @@ export class RandolphBody extends GraphicalObject {
     }
 
     setLimbs() {
-        this.leftLegBottom = { x: 400, y: 450 };
-        this.leftLegKne = { x: 400, y: 370 };
-        this.leftLegTop = { x: 440, y: 200 };
+        this.leftLegBottom = { x: 67, y: 305 };
+        this.leftLegKne = { x: 67, y: 225 };
+        this.leftLegTop = { x: 107, y: 55 };
 
-        this.rightLegBottom = { x: 580, y: 450 };
-        this.rightLegKne = { x: 540, y: 375 };
-        this.rightLegTop = { x: 540, y: 200 };
+        this.rightLegBottom = { x: 247, y: 305 };
+        this.rightLegKne = { x: 207, y: 230 };
+        this.rightLegTop = { x: 207, y: 55 };
 
-        this.rightShoulder = { x: 600, y: 160 };
-        this.rightArm = { x: 650, y: 100 };
+        this.rightShoulder = { x: 267, y: 15 };
+        this.rightArm = { x: 317, y: -5 };
 
-        this.leftShoulder = { x: 390, y: 160 };
-        this.leftArm = { x: 320, y: 240 };
+        this.leftShoulder = { x: 57, y: 15 };
+        this.leftArm = { x: -23, y: 95 };
+
     }
 
     pointsToCommands = (bezierPoints) => {
@@ -46,6 +47,11 @@ export class RandolphBody extends GraphicalObject {
         this.generateArmCommands(this.rightShoulder, this.rightArm);
         this.generateArmCommands(this.leftShoulder, this.leftArm);
         this.commands.push({ type: 'Z' });
+
+        // Scale
+        this.scale(0.5, 0.5);
+        // Translate to position
+        this.translate(this.points[0])
     }
 
     generateLegCommands(legBottomPoint, legKnePoint, legTopPoint) {
@@ -91,7 +97,7 @@ export class RandolphBody extends GraphicalObject {
         ]
 
         legSegments.forEach(segment => {
-            const bezierPoints = getQuadraticBezierPoints(...segment);
+            const bezierPoints = getBezierPoints(segment);
             this.pointsToCommands(bezierPoints);
         });
     }
@@ -162,18 +168,9 @@ export class RandolphBody extends GraphicalObject {
             [shoulderBottomPoint, armBottom, armMid, armTop, shoulderTopPoint],
         ]
 
-        if (shouldReverse) {
-            legSegments.forEach(segment => {
-                const bezierPoints = getQuarticBezierPoints(...segment.reverse());
-                this.pointsToCommands(bezierPoints);
-            });
-        } else {
-            legSegments.forEach(segment => {
-                const bezierPoints = getQuarticBezierPoints(...segment);
-                this.pointsToCommands(bezierPoints);
-            });
-        }
-
-
+        legSegments.forEach(segment => {
+            const bezierPoints = getBezierPoints(segment);
+            this.pointsToCommands((shouldReverse ? bezierPoints.reverse() : bezierPoints)); // reverse points if arm is left
+        });
     }
 }

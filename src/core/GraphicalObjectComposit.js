@@ -9,11 +9,6 @@ export class GraphicalObjectComposit extends GraphicalObject {
     }
 
     translate(delta) {
-        this.points.forEach(point => {
-            point.x += delta.x;
-            point.y += delta.y;
-        })
-
         this.children.forEach(child => {
             child.translate(delta);
         })

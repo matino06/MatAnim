@@ -5,6 +5,7 @@ import { transformCommands } from "../utils/svgUtils.js";
 export class GraphicalObject {
     constructor(points, {
         lineWidth = theme.lineWidth,
+        color = null,
         borderColor = theme.colors.primary,
         fill = true,
         fillColor = theme.colors.primary,
@@ -19,6 +20,11 @@ export class GraphicalObject {
         this.borderColor = borderColor;
         this.fill = fill;
         this.fillColor = fillColor;
+
+        if (color) {
+            this.borderColor = color;
+            this.fillColor = color;
+        }
 
         // Track scalling;
         this.lastXScale = 1;
@@ -88,12 +94,11 @@ export class GraphicalObject {
     }
 
     translate(delta) {
-        this.points.forEach(point => {
-            point.x += delta.x;
-            point.y += delta.y;
-        })
+        const transformedCommands = transformCommands(
+            this.commands, [{ transformType: 'translate', a: delta.x, b: delta.y }]
+        );
+        this.commands = transformedCommands;
 
-        this.generateCommands();
         this.notifyListeners();
     }
 
