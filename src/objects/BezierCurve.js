@@ -10,9 +10,9 @@ export class BezierCurve extends GraphicalObject {
 
     generateCommands() {
         this.commands = [];
-        const bezierPoints = getBezierPoints(this.points);
-        for (let index = 0; index < bezierPoints.length; index++) {
-            const point = bezierPoints[index];
+        this.bezierPoints = getBezierPoints(this.points);
+        for (let index = 0; index < this.bezierPoints.length; index++) {
+            const point = this.bezierPoints[index];
             this.commands.push({ type: 'L', x: point.x, y: point.y });
         }
 

@@ -21,4 +21,8 @@ export class Circle extends GraphicalObject {
         }
         this.commands = commands;
     }
+
+    getCenter() {
+        return this.points[0];
+    }
 }

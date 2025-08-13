@@ -2,7 +2,7 @@ import { GraphicalObject } from "../core/GraphicalObject"
 import { getBezierPoints } from "../utils/geometryUtils";
 import { theme } from "../theme/theme";
 
-export class RandolphBody extends GraphicalObject {
+export class PiCharacterBody extends GraphicalObject {
     constructor(points, options = {}) {
         const defaultOptions = {
             borderColor: theme.colors.secondary,
