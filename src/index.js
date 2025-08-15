@@ -13,6 +13,7 @@ export { MathText } from './objects/MathText.js';
 export { PiCharacterBody } from './objects/PiCharacterBody.js';
 
 export { Eye } from './objects/Eye.js';
+export { PiCharacter } from './objects/PiCharacter.js';
 export { NumberLine } from './objects/NumberLine.js';
 export { CoordinateSystem } from './objects/CoordinateSystem.js';
 export { FunctionPlot } from './objects/FunctionPlot.js';
