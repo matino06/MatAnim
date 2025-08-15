@@ -11,10 +11,10 @@ export class PiCharacter extends GraphicalObjectComposit {
     }
 
     constructPiCharacter() {
-        this.leftEye = new Eye([{ x: 45, y: 5 }]);
+        this.leftEye = new Eye([{ x: 85, y: -10 }]);
         this.children.push(this.leftEye);
 
-        this.rightEye = new Eye([{ x: 85, y: 5 }]);
+        this.rightEye = new Eye([{ x: 165, y: -10 }]);
         this.children.push(this.rightEye);
 
         this.piCharacterBody = new PiCharacterBody([{ x: 0, y: 20 }]);
@@ -22,11 +22,11 @@ export class PiCharacter extends GraphicalObjectComposit {
 
         this.mouth = new BezierCurve(
             [
-                { x: 75, y: 38 },
-                { x: 105, y: 38 },
-                { x: 105, y: 38 },
-                { x: 105, y: 45 },
-                { x: 75, y: 38 },
+                { x: 165, y: 55 },
+                { x: 220, y: 55 },
+                { x: 220, y: 55 },
+                { x: 220, y: 65 },
+                { x: 165, y: 55 },
             ],
             { color: "black" },
         );

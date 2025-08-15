@@ -48,8 +48,6 @@ export class PiCharacterBody extends GraphicalObject {
         this.generateArmCommands(this.leftShoulder, this.leftArm);
         this.commands.push({ type: 'Z' });
 
-        // Scale
-        this.scale(0.5, 0.5);
         // Translate to position
         this.translate(this.points[0])
     }

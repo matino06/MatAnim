@@ -6,8 +6,8 @@ export class Eye extends GraphicalObjectComposit {
     constructor(points, options = {}) {
         const defaultOptions = {
             eyeDirectionDeg: 25,
-            irisRadius: 5,
-            pupileRadius: 0.5
+            irisRadius: 10,
+            pupileRadius: 1
         };
         options = { ...defaultOptions, ...options };
 
@@ -25,12 +25,12 @@ export class Eye extends GraphicalObjectComposit {
         const position = this.points[0];
         this.eyeBall = new BezierCurve(
             [
-                { x: position.x + 20, y: position.y + 0 }, // top point
+                { x: position.x + 40, y: position.y + 0 }, // top point
                 { x: position.x + 0, y: position.y + 0 }, // top left
-                { x: position.x + 0, y: position.y + 38 }, // bottom left
-                { x: position.x + 38, y: position.y + 38 }, // bottom right
-                { x: position.x + 38, y: position.y + 0 }, // top right
-                { x: position.x + 19, y: position.y + 0 }, // top point
+                { x: position.x + 0, y: position.y + 80 }, // bottom left
+                { x: position.x + 80, y: position.y + 80 }, // bottom right
+                { x: position.x + 80, y: position.y + 0 }, // top right
+                { x: position.x + 40, y: position.y + 0 }, // top point
             ],
             { fill: true, color: "white" },
         );

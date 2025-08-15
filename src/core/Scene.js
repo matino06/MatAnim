@@ -52,6 +52,15 @@ export class Scene {
         }
     }
 
+    remove(object, reDraw = true) {
+        this.graphicalObjects = this.graphicalObjects
+            .filter(graphicalObject => graphicalObject !== object);
+
+        if (reDraw) {
+            this.draw();
+        }
+    }
+
     updateScaleParams() {
         const w = this.canvas.width;
         const h = this.canvas.height;
