@@ -35,6 +35,56 @@ export class GraphicalObject {
         return this.commands;
     }
 
+    getBoundingBox() {
+        if (!this.commands || this.commands.length === 0) {
+            return null;
+        }
+
+        let minX = Infinity;
+        let minY = Infinity;
+        let maxX = -Infinity;
+        let maxY = -Infinity;
+
+        for (const cmd of this.commands) {
+            ['x', 'x1', 'x2'].forEach(prop => {
+                if (cmd[prop] !== null && cmd[prop] !== undefined) {
+                    minX = Math.min(minX, cmd[prop]);
+                    maxX = Math.max(maxX, cmd[prop]);
+                }
+            });
+
+            ['y', 'y1', 'y2'].forEach(prop => {
+                if (cmd[prop] !== null && cmd[prop] !== undefined) {
+                    minY = Math.min(minY, cmd[prop]);
+                    maxY = Math.max(maxY, cmd[prop]);
+                }
+            });
+        }
+
+        if (minX === Infinity || minY === Infinity) {
+            return null;
+        }
+
+        return {
+            minX,
+            minY,
+            maxX,
+            maxY,
+            width: maxX - minX,
+            height: maxY - minY,
+            centerX: (minX + maxX) / 2,
+            centerY: (minY + maxY) / 2
+        };
+    }
+
+    getCenter() {
+        const bbox = this.getBoundingBox();
+        return bbox ? {
+            x: bbox.centerX,
+            y: bbox.centerY
+        } : { x: 0, y: 0 };
+    }
+
     setWidth() {
         const commands = this.getCommands();
         if (!commands || commands.length === 0) {
@@ -102,7 +152,7 @@ export class GraphicalObject {
         this.notifyListeners();
     }
 
-    scale(xScale = this.lastXScale, yScale = this.lastYScale) {
+    scale(xScale = this.lastXScale, yScale = this.lastYScale, center = this.getCenter()) {
         if (xScale === this.lastXScale && yScale === this.lastYScale) {
             return;
         }
@@ -110,10 +160,17 @@ export class GraphicalObject {
         const finalXScale = xScale / this.lastXScale;
         const finalYScale = yScale / this.lastYScale;
 
+        if (center.x !== 0 || center.y !== 0) {
+            this.translate({ x: -center.x, y: -center.y });
+        }
+
         const scaledCommands = transformCommands(
             this.commands, [{ transformType: 'scale', a: finalXScale, b: finalYScale }]
         );
         this.commands = scaledCommands;
+        if (center.x !== 0 || center.y !== 0) {
+            this.translate({ x: -center.x, y: -center.y });
+        }
         this.notifyListeners();
 
         this.lastXScale = xScale;

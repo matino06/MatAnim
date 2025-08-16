@@ -12,6 +12,7 @@ export class Animation {
         };
 
         this.options = { ...defaultOptions, ...options };
+        this.animationsTypeForComposit = false;
         this.graphicalObject = graphicalObject;
         this.startTime = null;
     }

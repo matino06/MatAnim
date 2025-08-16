@@ -26,6 +26,10 @@ export class FunctionPlot extends GraphicalObject {
         this.commands = this.generateCommands();
     }
 
+    getCenter() {
+        return this.coordinateSystem.pointToCoords(0, 0);
+    }
+
     generateCommands() {
         const commands = [];
         const points = [];

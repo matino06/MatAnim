@@ -242,6 +242,10 @@ export class NumberLine extends GraphicalObjectComposit {
         return Math.hypot(p1.x - p0.x, p1.y - p0.y);
     }
 
+    getCenter() {
+        return this.pointToCoords(0);
+    }
+
     setTicks(ticks) {
         this.ticks = [];
         const [min, max] = this.range;

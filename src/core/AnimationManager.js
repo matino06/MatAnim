@@ -8,7 +8,7 @@ export class AnimationManager {
     }
 
     add(animation) {
-        if (animation.graphicalObjectIsComposite()) {
+        if (animation.animationsTypeForComposit && animation.graphicalObjectIsComposite()) {
             const AnimationClass = animation.constructor;
             const animationOptions = animation.options;
             const compositeObject = animation.graphicalObject;

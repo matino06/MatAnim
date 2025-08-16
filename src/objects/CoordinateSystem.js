@@ -82,6 +82,10 @@ export class CoordinateSystem extends GraphicalObjectComposit {
         return cords;
     }
 
+    getCenter() {
+        return this.pointToCoords(0, 0);
+    }
+
 
     ////////////////////////////////////////////////////////////////////////////
     /* CREATING COORDINATE SYSTEM COMPONENTS AND ADDING THEM TO CHILDREN LIST */
