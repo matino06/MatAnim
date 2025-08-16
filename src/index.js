@@ -21,4 +21,5 @@ export { FunctionPlot } from './objects/FunctionPlot.js';
 export * from './core/easingFunctions.js';
 
 export { TranslateAnimation } from "./animations/TranslateAnimation.js";
+export { ScaleAnimation } from "./animations/ScaleAnimation.js";
 export { OutlineThanFillAnimation } from './animations/OutlineThanFillAnimation.js';
