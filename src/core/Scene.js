@@ -43,14 +43,20 @@ export class Scene {
         }
     }
 
-    add(object, reDraw = true) {
-        this.graphicalObjects.push(object);
+    add(object, { reDraw = true, toTop = true } = {}) {
+        if (toTop) {
+            this.graphicalObjects.push(object);
+        } else {
+            this.graphicalObjects.unshift(object);
+        }
+
         object.addListener(this.graphicalObjectListener);
 
         if (reDraw) {
             this.draw();
         }
     }
+
 
     remove(object, reDraw = true) {
         this.graphicalObjects = this.graphicalObjects

@@ -4,7 +4,8 @@ import { drawOutline, fadeInFill } from "../utils/animationUtils.js";
 export class OutlineThanFillAnimation extends Animation {
     constructor(graphicalObject, options = {}) {
         const outlineDefaults = {
-            fillFadeDuration: 1000
+            fillFadeDuration: 1000,
+            toTop: true,
         };
 
         super(graphicalObject, options);
@@ -43,7 +44,7 @@ export class OutlineThanFillAnimation extends Animation {
         if (this.phase === "line") {
             let outlineProgress = elapsed / this.options.duration;
             if (outlineProgress > 1 && !this.fill) {
-                this.scene.add(this.graphicalObject, true);
+                this.scene.add(this.graphicalObject, { toTop: this.options.toTop });
                 return false;
             }
             if (outlineProgress > 1) {
@@ -53,6 +54,10 @@ export class OutlineThanFillAnimation extends Animation {
             }
 
             const outlineProgresWithEasingFunction = this.options.easingFunction(outlineProgress);
+
+            if (!this.options.toTop) {
+                ctx.globalCompositeOperation = 'destination-over';
+            }
 
             drawOutline(
                 ctx,
@@ -67,15 +72,23 @@ export class OutlineThanFillAnimation extends Animation {
                 }
             );
 
+            if (!this.options.toTop) {
+                ctx.globalCompositeOperation = 'source-over';
+            }
+
             return true;
         } else if (this.phase === "fill") {
             let fillProgress = elapsed / this.options.fillFadeDuration;
             if (fillProgress > 1) {
-                this.scene.add(this.graphicalObject, true);
+                this.scene.add(this.graphicalObject, { toTop: this.options.toTop });
                 return false;
             }
 
             const fillProgresWithEasingFunction = this.options.easingFunction(fillProgress);
+
+            if (!this.options.toTop) {
+                ctx.globalCompositeOperation = 'destination-over';
+            }
 
             fadeInFill(
                 ctx,
@@ -87,6 +100,10 @@ export class OutlineThanFillAnimation extends Animation {
                     lineWidth: this.graphicalObject.lineWidth
                 }
             );
+
+            if (!this.options.toTop) {
+                ctx.globalCompositeOperation = 'source-over';
+            }
 
             return true;
         }

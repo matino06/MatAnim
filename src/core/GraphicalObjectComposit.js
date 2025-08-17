@@ -53,20 +53,27 @@ export class GraphicalObjectComposit extends GraphicalObject {
         } : { x: 0, y: 0 };
     }
 
-    translate(delta) {
+    translate(delta, notify = true) {
         this.children.forEach(child => {
-            child.translate(delta);
+            child.translate(delta, false);
         })
-        this.notifyListeners();
+
+        if (notify) {
+            this.notifyListeners();
+        }
     }
 
-    scale(xScale = this.lastXScale, yScale = this.lastYScale, pivot = this.getCenter()) {
+    scale(xScale = this.lastXScale, yScale = this.lastYScale, pivot = this.getCenter(), notify = true) {
         this.children.forEach(child => {
-            child.scale(xScale, yScale, pivot);
+            child.scale(xScale, yScale, pivot, false);
         });
 
         this.lastXScale = xScale;
         this.lastYScale = yScale;
+
+        if (notify) {
+            this.notifyListeners();
+        }
     }
 
     render(ctx) {

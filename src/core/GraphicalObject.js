@@ -29,6 +29,12 @@ export class GraphicalObject {
         // Track scalling;
         this.lastXScale = 1;
         this.lastYScale = 1;
+
+        // Track position
+        this.position = {
+            x: 0,
+            y: 0,
+        };
     }
 
     getCommands() {
@@ -143,16 +149,21 @@ export class GraphicalObject {
         this.height = maxY - minY;
     }
 
-    translate(delta) {
+    translate(delta, notify = true) {
         const transformedCommands = transformCommands(
             this.commands, [{ transformType: 'translate', a: delta.x, b: delta.y }]
         );
         this.commands = transformedCommands;
 
-        this.notifyListeners();
+        this.position.x += delta.x;
+        this.position.y += delta.y;
+
+        if (notify) {
+            this.notifyListeners();
+        }
     }
 
-    scale(xScale = this.lastXScale, yScale = this.lastYScale, pivot = this.getCenter()) {
+    scale(xScale = this.lastXScale, yScale = this.lastYScale, pivot = this.getCenter(), notify = true) {
         if (xScale === this.lastXScale && yScale === this.lastYScale) {
             return;
         }
@@ -166,10 +177,12 @@ export class GraphicalObject {
 
         this.commands = scaledCommands;
 
-        this.notifyListeners();
-
         this.lastXScale = xScale;
         this.lastYScale = yScale;
+
+        if (notify) {
+            this.notifyListeners();
+        }
     }
 
     addListener(listener) {
