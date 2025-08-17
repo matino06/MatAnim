@@ -60,16 +60,9 @@ export class GraphicalObjectComposit extends GraphicalObject {
         this.notifyListeners();
     }
 
-    scale(xScale = this.lastXScale, yScale = this.lastYScale, center = this.getCenter()) {
+    scale(xScale = this.lastXScale, yScale = this.lastYScale, pivot = this.getCenter()) {
         this.children.forEach(child => {
-            if (center.x !== 0 || center.y !== 0) {
-                child.translate({ x: -center.x, y: -center.y });
-            }
-
-            child.scale(xScale, yScale, { x: 0, y: 0 });
-            if (center.x !== 0 || center.y !== 0) {
-                child.translate({ x: center.x, y: center.y });
-            }
+            child.scale(xScale, yScale, pivot);
         });
 
         this.lastXScale = xScale;

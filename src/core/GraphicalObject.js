@@ -152,7 +152,7 @@ export class GraphicalObject {
         this.notifyListeners();
     }
 
-    scale(xScale = this.lastXScale, yScale = this.lastYScale, center = this.getCenter()) {
+    scale(xScale = this.lastXScale, yScale = this.lastYScale, pivot = this.getCenter()) {
         if (xScale === this.lastXScale && yScale === this.lastYScale) {
             return;
         }
@@ -160,17 +160,12 @@ export class GraphicalObject {
         const finalXScale = xScale / this.lastXScale;
         const finalYScale = yScale / this.lastYScale;
 
-        if (center.x !== 0 || center.y !== 0) {
-            this.translate({ x: -center.x, y: -center.y });
-        }
-
         const scaledCommands = transformCommands(
-            this.commands, [{ transformType: 'scale', a: finalXScale, b: finalYScale }]
+            this.commands, [{ transformType: 'scale', a: finalXScale, b: finalYScale, pivot: pivot }]
         );
+
         this.commands = scaledCommands;
-        if (center.x !== 0 || center.y !== 0) {
-            this.translate({ x: -center.x, y: -center.y });
-        }
+
         this.notifyListeners();
 
         this.lastXScale = xScale;

@@ -17,7 +17,11 @@ const html = mathjax.document('', {
 
 export const transformCommands = (commands, transformations) => {
     return transformations.reduce((segment, transformation) => {
-        const { transformType, a, b } = transformation;
+        let { transformType, a, b, pivot } = transformation;
+
+        if (pivot === undefined) {
+            pivot = { x: 0, y: 0 };
+        }
 
         return segment.map(command => {
             const transformed = { ...command };
@@ -32,12 +36,12 @@ export const transformCommands = (commands, transformations) => {
             }
 
             if (transformType === 'scale') {
-                if (command.x !== undefined) transformed.x *= a;
-                if (command.y !== undefined) transformed.y *= b;
-                if (command.x1 !== undefined) transformed.x1 *= a;
-                if (command.y1 !== undefined) transformed.y1 *= b;
-                if (command.x2 !== undefined) transformed.x2 *= a;
-                if (command.y2 !== undefined) transformed.y2 *= b;
+                if (command.x !== undefined) transformed.x = (transformed.x - pivot.x) * a + pivot.x;
+                if (command.y !== undefined) transformed.y = (transformed.y - pivot.y) * b + pivot.y;
+                if (command.x1 !== undefined) transformed.x1 = (transformed.x1 - pivot.x) * a + pivot.x;
+                if (command.y1 !== undefined) transformed.y1 = (transformed.y1 - pivot.y) * b + pivot.y;
+                if (command.x2 !== undefined) transformed.x2 = (transformed.x2 - pivot.x) * a + pivot.x;
+                if (command.y2 !== undefined) transformed.y2 = (transformed.y2 - pivot.y) * b + pivot.y;
             }
 
             return transformed;
