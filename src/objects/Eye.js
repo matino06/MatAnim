@@ -21,6 +21,27 @@ export class Eye extends GraphicalObjectComposit {
         this.constructEye();
     }
 
+    moveEyeTop(delta) {
+        const position = this.points[0];
+        this.eyeBall.commands = new BezierCurve(
+            [
+                { x: position.x + 40, y: position.y + 0 + delta }, // top point
+                { x: position.x + 0, y: position.y + 0 }, // top left
+                { x: position.x + 0, y: position.y + 80 }, // bottom left
+                { x: position.x + 80, y: position.y + 80 }, // bottom right
+                { x: position.x + 80, y: position.y + 0 }, // top right
+                { x: position.x + 40, y: position.y + 0 + delta }, // top point
+            ],
+            { fill: true, color: "white" },
+        ).commands;
+
+        this.eyeBall.squintAmount = delta;
+
+        this.eyeBall.reapplyTranformations();
+
+        this.notifyListeners();
+    }
+
     constructEye() {
         const position = this.points[0];
         this.eyeBall = new BezierCurve(

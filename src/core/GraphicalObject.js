@@ -30,11 +30,8 @@ export class GraphicalObject {
         this.lastXScale = 1;
         this.lastYScale = 1;
 
-        // Track position
-        this.position = {
-            x: 0,
-            y: 0,
-        };
+        // Track transformations
+        this.transformations = [];
     }
 
     getCommands() {
@@ -150,13 +147,13 @@ export class GraphicalObject {
     }
 
     translate(delta, notify = true) {
+        const transofrmation = { transformType: 'translate', a: delta.x, b: delta.y };
+        this.transformations.push(transofrmation);
+
         const transformedCommands = transformCommands(
-            this.commands, [{ transformType: 'translate', a: delta.x, b: delta.y }]
+            this.commands, [transofrmation]
         );
         this.commands = transformedCommands;
-
-        this.position.x += delta.x;
-        this.position.y += delta.y;
 
         if (notify) {
             this.notifyListeners();
@@ -171,8 +168,11 @@ export class GraphicalObject {
         const finalXScale = xScale / this.lastXScale;
         const finalYScale = yScale / this.lastYScale;
 
+        const transofrmation = { transformType: 'scale', a: finalXScale, b: finalYScale, pivot: pivot };
+        this.transformations.push(transofrmation);
+
         const scaledCommands = transformCommands(
-            this.commands, [{ transformType: 'scale', a: finalXScale, b: finalYScale, pivot: pivot }]
+            this.commands, [transofrmation]
         );
 
         this.commands = scaledCommands;
@@ -183,6 +183,11 @@ export class GraphicalObject {
         if (notify) {
             this.notifyListeners();
         }
+    }
+
+    reapplyTranformations() {
+        const transformedCommands = transformCommands(this.commands, this.transformations);
+        this.commands = transformedCommands;
     }
 
     addListener(listener) {
