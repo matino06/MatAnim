@@ -2,21 +2,30 @@ export class AnimationManager {
     constructor(scene) {
         this.scene = scene;
         this.animations = [];
+        this.pendingAnimations = [];
         this.running = false;
         this.lastTimestamp = 0;
-        this.firstTime = true;
+        this.inStep = false;
     }
 
     add(animation) {
+        if (this.inStep) {
+            // Queue if we're currently in step()
+            this.pendingAnimations.push(animation);
+        } else {
+            this._addAnimationDirectly(animation);
+        }
+    }
+
+    _addAnimationDirectly(animation) {
         if (animation.animationsTypeForComposit && animation.graphicalObjectIsComposite()) {
             const AnimationClass = animation.constructor;
             const animationOptions = animation.options;
             const compositeObject = animation.graphicalObject;
             compositeObject.children.forEach(child => {
                 const childAnimation = new AnimationClass(child, animationOptions);
-                this.add(childAnimation);
+                this._addAnimationDirectly(childAnimation);
             });
-
             return;
         } else {
             animation.setScene(this.scene);
@@ -30,36 +39,39 @@ export class AnimationManager {
     }
 
     step(timestamp) {
+        this.inStep = true; // Mark as in step process
+
         if (!this.lastTimestamp) this.lastTimestamp = timestamp;
         const delta = timestamp - this.lastTimestamp;
         this.lastTimestamp = timestamp;
 
-        // Only redraw if we have animations to process
         const hasAnimations = this.animations.length > 0;
 
         if (hasAnimations) {
-            // Clear and prepare canvas
-            this.scene.draw()
-
-            // Apply transformations for animations
+            this.scene.draw();
             if (this.scene.scaleToScreen) {
                 this.scene.applyTransformations();
             }
 
-            // Process animations
             this.animations = this.animations.filter(anim => anim.step(timestamp, delta));
 
-            // Reset transformations
             if (this.scene.scaleToScreen) {
                 this.scene.resetTransformations();
             }
+        }
+
+        this.inStep = false; // Step process complete
+
+        // Add pending animations after step completes
+        if (this.pendingAnimations.length > 0) {
+            this.pendingAnimations.forEach(anim => this._addAnimationDirectly(anim));
+            this.pendingAnimations = [];
         }
 
         if (this.animations.length > 0) {
             requestAnimationFrame(this.step.bind(this));
         } else {
             this.running = false;
-            // Final draw to ensure static objects are rendered correctly
             this.scene.draw();
         }
     }

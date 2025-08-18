@@ -10,7 +10,18 @@ export class PiCharacterBody extends GraphicalObject {
             lineWidth: 4,
         }
         super(points, { ...defaultOptions, ...options });
+        this.isConstructing = true;
+
         this.setLimbs();
+        this.generateCommands();
+
+        this.isConstructing = false;
+    }
+
+    moveRightArm(delta) {
+        this.rightArm.x += delta.x;
+        this.rightArm.y += delta.y;
+
         this.generateCommands();
     }
 
@@ -32,7 +43,6 @@ export class PiCharacterBody extends GraphicalObject {
     }
 
     pointsToCommands = (bezierPoints) => {
-        const lastPoint = bezierPoints[0];
         for (let index = 0; index < bezierPoints.length; index++) {
             const point = bezierPoints[index];
             this.commands.push({ type: 'L', x: point.x, y: point.y });
@@ -49,7 +59,11 @@ export class PiCharacterBody extends GraphicalObject {
         this.commands.push({ type: 'Z' });
 
         // Translate to position
-        this.translate(this.points[0])
+        if (this.isConstructing) {
+            this.translate(this.points[0])
+        } else {
+            this.reapplyTranformations();
+        }
     }
 
     generateLegCommands(legBottomPoint, legKnePoint, legTopPoint) {

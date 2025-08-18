@@ -22,6 +22,7 @@ export * from './core/easingFunctions.js';
 
 export { SquintingEyeAnimation } from "./animations/SquintingEyeAnimation.js";
 export { UnSquintingEyeAnimation } from "./animations/UnSquintingEyeAnimation.js";
+export { WavingRightArmAnimation } from "./animations/WavingRightArmAnimation.js";
 export { TranslateAnimation } from "./animations/TranslateAnimation.js";
 export { ScaleAnimation } from "./animations/ScaleAnimation.js";
 export { OutlineThanFillAnimation } from './animations/OutlineThanFillAnimation.js';
