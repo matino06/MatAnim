@@ -1,3 +1,4 @@
+
 export { Animation } from './core/Animation.js';
 export { AnimationManager } from './core/AnimationManager.js';
 export { GraphicalObject } from './core/GraphicalObject.js';
@@ -12,6 +13,7 @@ export { Text } from './objects/Text.js';
 export { MathText } from './objects/MathText.js';
 export { PiCharacterBody } from './objects/PiCharacterBody.js';
 
+export { MultiLineText } from "./objects/MultiLineText";
 export { Eye } from './objects/Eye.js';
 export { PiCharacter } from './objects/PiCharacter.js';
 export { NumberLine } from './objects/NumberLine.js';
