@@ -1,10 +1,12 @@
 import { GraphicalObjectComposit } from "../core/GraphicalObjectComposit";
 import { MathText } from "../objects/MathText";
+import { theme } from "../theme/theme";
 
 export class MultiLineText extends GraphicalObjectComposit {
     constructor(points, text, options = {}) {
         const defaultOptions = {
-            fontSize: 24
+            fontSize: 24,
+            color: theme.colors.text
         }
 
         super(points, { ...defaultOptions, ...options });
