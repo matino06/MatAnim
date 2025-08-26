@@ -9,7 +9,6 @@ export class OutlineThanFillAnimation extends Animation {
         };
 
         super(graphicalObject, options);
-
         this.options = { ...outlineDefaults, ...this.options };
         this.animationsTypeForComposit = true;
 

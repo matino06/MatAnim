@@ -28,6 +28,7 @@ export class AnimationManager {
             });
             return;
         } else {
+            console.log(animation)
             animation.setScene(this.scene);
             this.animations.push(animation);
         }

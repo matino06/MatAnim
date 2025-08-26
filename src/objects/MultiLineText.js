@@ -60,7 +60,6 @@ export class MultiLineText extends GraphicalObjectComposit {
                 part = part.trimStart();
                 if (part.startsWith("\\(") && part.endsWith("\\)")) {
                     latex = part.substring(2, part.length - 2);
-                    console.log(latex)
                 } else {
                     latex = "\\text{" + part + "}";
                 }
