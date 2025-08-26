@@ -39,11 +39,9 @@ export function applyPathCommand(command, ctx, state) {
         case 'T': // Smooth quadratic bezier
             let cpX, cpY;
             if (state.prevControl) {
-                // Reflektiraj prethodnu kontrolnu točku
                 cpX = 2 * state.currentX - state.prevControl.x;
                 cpY = 2 * state.currentY - state.prevControl.y;
             } else {
-                // Koristi trenutnu poziciju ako nema prethodne
                 cpX = state.currentX;
                 cpY = state.currentY;
             }
@@ -67,11 +65,9 @@ export function applyPathCommand(command, ctx, state) {
         case 'S': // Smooth cubic bezier
             let s_cp1x, s_cp1y;
             if (state.prevControl) {
-                // Reflektiraj prethodnu kontrolnu točku
                 s_cp1x = 2 * state.currentX - state.prevControl.x;
                 s_cp1y = 2 * state.currentY - state.prevControl.y;
             } else {
-                // Koristi trenutnu poziciju ako nema prethodne
                 s_cp1x = state.currentX;
                 s_cp1y = state.currentY;
             }
@@ -85,8 +81,7 @@ export function applyPathCommand(command, ctx, state) {
             state.prevControl = { x: command.x2, y: command.y2 };
             break;
 
-        case 'A': // Arc (pojednostavljena implementacija)
-            // Ovo je vrlo pojednostavljena implementacija!
+        case 'A':
             ctx.ellipse(
                 state.currentX, state.currentY,
                 command.rx, command.ry,

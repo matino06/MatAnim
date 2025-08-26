@@ -96,6 +96,10 @@ export class Scene {
         this.ctx.save();
         this.ctx.translate(this.offsetX, this.offsetY);
         this.ctx.scale(this.scaleX, this.scaleY);
+
+        // Clip everything outside of the scene
+        this.ctx.rect(0, 0, this.expected_screen_width, this.expected_screen_height);
+        this.ctx.clip();
     }
 
     resetTransformations() {
