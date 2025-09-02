@@ -22,6 +22,7 @@ export class FadeInAnimation extends Animation {
 
     step(timestamp) {
         if (!this.added) {
+            this.added = true;
             this.scene.add(this.graphicalObject, { toTop: this.options.toTop });
         }
         if (!this.startTime) this.startTime = timestamp;
