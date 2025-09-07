@@ -31,5 +31,8 @@ export class Text extends GraphicalObject {
         const path = font.getPath(this.text, position.x, position.y, this.fontSize);
 
         this.commands = path.commands;
+
+        this.setWidth();
+        this.setHeight();
     }
 }

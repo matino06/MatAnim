@@ -5,7 +5,7 @@ export class Scene {
         autoResize = true,
         scaleToScreen = true,
         expected_screen_width = 1400,
-        expected_screen_height = 719
+        expected_screen_height = 645
     } = {}) {
         this.canvas = canvas;
         this.ctx = canvas.getContext('2d');

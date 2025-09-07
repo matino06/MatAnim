@@ -1,5 +1,6 @@
 import { GraphicalObjectComposit } from "../core/GraphicalObjectComposit";
 import { MathText } from "../objects/MathText";
+import { Text } from "../objects/Text";
 import { theme } from "../theme/theme";
 
 export class MultiLineText extends GraphicalObjectComposit {
@@ -50,6 +51,7 @@ export class MultiLineText extends GraphicalObjectComposit {
         this.height = 0;
 
         let yOffset = 0;
+
         this.lines.forEach(line => {
             let xOffset = 0;
             let maxHeight = 0;
@@ -58,19 +60,34 @@ export class MultiLineText extends GraphicalObjectComposit {
                 let latex;
 
                 part = part.trimStart();
+                let text;
                 if (part.startsWith("\\(") && part.endsWith("\\)")) {
                     latex = part.substring(2, part.length - 2);
+
+                    text = new MathText(
+                        [{
+                            x: position.x + xOffset,
+                            y: position.y + yOffset
+                        }],
+                        latex,
+                        this.options
+                    )
                 } else {
-                    latex = "\\text{" + part + "}";
+                    latex = part;
+
+                    text = new Text(
+                        [{
+                            x: position.x + xOffset,
+                            y: position.y + yOffset + this.options.fontSize
+                        }],
+                        latex,
+                        {
+                            lineWidth: 0.5,
+                            ...this.options
+                        }
+                    )
                 }
-                const text = new MathText(
-                    [{
-                        x: position.x + xOffset,
-                        y: position.y + yOffset
-                    }],
-                    latex,
-                    this.options
-                )
+
 
                 if (text.height > maxHeight) {
                     maxHeight = text.height;
