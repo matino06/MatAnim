@@ -279,8 +279,6 @@ const bubble = new BubbleWithText(
 ### BezierCurve
 
 ```javascript
-import { BezierCurve } from "matanim";
-
 const curve = new BezierCurve(
   [
     { x: 100, y: 200 },
@@ -300,8 +298,6 @@ const curve = new BezierCurve(
 Composite object used internally by `PiCharacter`, but also available for standalone usage.
 
 ```javascript
-import { Eye } from "matanim";
-
 const eye = new Eye([{ x: 100, y: 100 }], {
   eyeDirectionDeg: 45,
   irisRadius: 10,
@@ -314,8 +310,6 @@ const eye = new Eye([{ x: 100, y: 100 }], {
 Highly configurable number line with ticks, labels, arrows and rotation.
 
 ```javascript
-import { NumberLine } from "matanim";
-
 const numberLine = new NumberLine(
   [
     { x: 100, y: 300 },
@@ -335,11 +329,9 @@ const numberLine = new NumberLine(
 Supports mixed regular text and inline LaTeX expressions.
 
 ```javascript
-import { MultiLineText } from "matanim";
-
 const text = new MultiLineText(
   [{ x: 100, y: 100 }],
-  "This is text with (x^2 + y^2) inside",
+  "This is text with with\n multiple lines.",
   { fontSize: 24 }
 );
 ```
@@ -491,22 +483,9 @@ setTimeout(() => {
 
 ---
 
-## 🤝 Contributing
-
-Contributions are welcome! Feel free to submit a Pull Request.
-
----
-
-## 📄 License
-
-MIT License – see the `LICENSE` file for details.
-
----
-
 ## ❤️ Acknowledgments
 
 - Designed for mathematics education
-- Inspired by tools like Desmos and GeoGebra
-- Built with love for teachers and students
+- Inspired by manim
 
 > **Note:** MatAnim is designed for short, focused educational animations that clearly illustrate mathematical concepts.
