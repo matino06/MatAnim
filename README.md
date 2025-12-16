@@ -2,6 +2,8 @@
 
 A lightweight JavaScript library for creating engaging mathematical animations and visualizations for educational purposes. Perfect for teachers, students, and anyone looking to make math concepts come alive through interactive visualizations.
 
+![Linear Transformation Mode](images/banner.png)
+
 ---
 
 ## ✨ Features
